@@ -25,5 +25,6 @@
 				</form>
 			</li>
 		</security:authorize>
+		<li><a href="<c:url value='/user/toevoegen'/>">Account aanmaken</a></li>
 	</ul>
 </nav>

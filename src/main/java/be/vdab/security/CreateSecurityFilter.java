@@ -58,10 +58,10 @@ public class CreateSecurityFilter extends WebSecurityConfigurerAdapter {
 				.hasAnyAuthority(USER, ADMIN)
 				.antMatchers(HttpMethod.POST, "/artikels")
 				.hasAnyAuthority(USER, ADMIN)
-				.antMatchers(HttpMethod.PUT, "/filialen/*")
+				.antMatchers(HttpMethod.PUT, "/artikels/*")
 				.hasAuthority(ADMIN)
-				.antMatchers(HttpMethod.DELETE, "/filialen/*")
-				.hasAuthority(ADMIN).antMatchers("/", "/login").permitAll()
+				.antMatchers(HttpMethod.DELETE, "/artikels/*")
+				.hasAuthority(ADMIN).antMatchers("/", "/login", "/user", "/user/toevoegen").permitAll()
 				.antMatchers("/**").authenticated().and().exceptionHandling()
 				.accessDeniedPage("/WEB-INF/JSP/forbidden.jsp");
 		http.httpBasic();

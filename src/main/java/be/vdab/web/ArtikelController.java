@@ -1,5 +1,6 @@
 package be.vdab.web;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
@@ -20,15 +22,18 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import be.vdab.entities.Artikel;
+import be.vdab.entities.User;
 import be.vdab.enums.Ouderdom;
 import be.vdab.enums.Soort;
 import be.vdab.services.ArtikelService;
+import be.vdab.services.UserService;
 import be.vdab.valueobjects.Regio;
 
 @Controller
 @RequestMapping(value = "/artikels", produces = MediaType.TEXT_HTML_VALUE)
 public class ArtikelController {
 	private final ArtikelService artikelService;
+	private final UserService userService;
 	private static final String ARTIKELS_VIEW = "artikels/artikels";
 	private static final String TOEVOEGEN_VIEW = "artikels/toevoegen";
 	private static final String REDIRECT_URL_NA_TOEVOEGEN = "redirect:/artikels";
@@ -41,9 +46,12 @@ public class ArtikelController {
 	private static final String REDIRECT_URL_NA_WIJZIGEN = "redirect:/artikels";
 
 	@Autowired
-	ArtikelController(ArtikelService artikelService) {
+	ArtikelController(ArtikelService artikelService, UserService userService) {
 		this.artikelService = artikelService;
+		this.userService = userService;
 	}
+	
+	//if you register artikel it binds it to the logged in user.
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid Artikel artikel, BindingResult bindingResult,
@@ -51,6 +59,8 @@ public class ArtikelController {
 		if (bindingResult.hasErrors()) {
 			return TOEVOEGEN_VIEW;
 		}
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		artikel.setUser(user);
 		artikelService.create(artikel);
 		return REDIRECT_URL_NA_TOEVOEGEN;
 	}

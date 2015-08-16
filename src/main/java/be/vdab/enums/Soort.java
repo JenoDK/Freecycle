@@ -1,9 +1,8 @@
 package be.vdab.enums;
 
 public enum Soort {
-	ELEKTRO("Elektro"), MEUBEL("Meubel"), GEREEDSCHAP("Gereedschap"), OVERIGE(
-			"Overige");
-
+	ELEKTRO("Elektro"), MEUBEL("Meubel"), GEREEDSCHAP("Gereedschap"), OVERIGE("Overige"), FOOD("Food"), KEUKEN("Keuken");
+	
 	private String id;
 
 	private Soort(String id) {
@@ -13,4 +12,5 @@ public enum Soort {
 	public String getId() {
 		return id;
 	}
+
 }
