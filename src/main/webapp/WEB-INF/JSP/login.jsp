@@ -4,7 +4,7 @@
 <%@taglib prefix='security'
 	uri='http://www.springframework.org/security/tags'%>
 <%@taglib prefix='spring' uri='http://www.springframework.org/tags'%>
-<!doctype html>
+<!DOCTYPE html>
 <html lang='nl'>
 <head>
 <link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
