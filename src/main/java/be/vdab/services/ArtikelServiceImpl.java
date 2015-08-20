@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 
 import be.vdab.dao.ArtikelDAO;
 import be.vdab.entities.Artikel;
+import be.vdab.entities.User;
 import be.vdab.valueobjects.Regio;
 
 @ReadOnlyTransactionalService
@@ -58,5 +59,12 @@ public class ArtikelServiceImpl implements ArtikelService {
 	public long findAantalArtikels() {
 		return artikelDAO.count();
 	}
+
+	@Override
+	public List<Artikel> findByUser(User user) {
+		return artikelDAO.findByUser(user);
+	}
+	
+	
 
 }

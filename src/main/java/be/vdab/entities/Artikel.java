@@ -2,6 +2,9 @@ package be.vdab.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
@@ -56,6 +61,9 @@ public class Artikel implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "userid")
 	private User user;
+	@OneToMany(mappedBy = "artikel")
+	@OrderBy("id")
+	private Set<Reactie> reacties;
 
 	public Artikel() {
 	}
@@ -67,6 +75,25 @@ public class Artikel implements Serializable {
 		this.soort = soort;
 		this.ouderdom = ouderdom;
 		this.regio = regio;
+		reacties = new LinkedHashSet<>();
+	}
+
+	public Set<Reactie> getReacties() {
+		return Collections.unmodifiableSet(reacties);
+	}
+
+	public void addReactie(Reactie reactie) {
+		reacties.add(reactie);
+		if (reactie.getArtikel() != this) {
+			reactie.setArtikel(this);
+		}
+	}
+
+	public void removeReactie(Reactie reactie) {
+		reacties.remove(reactie);
+		if (reactie.getArtikel() == this) {
+			reactie.setArtikel(null);
+		}
 	}
 
 	public long getId() {

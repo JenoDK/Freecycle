@@ -22,23 +22,36 @@
 				<dd>${artikel.ouderdom.id}</dd>
 				<dt>Regio</dt>
 				<dd>${artikel.regio}</dd>
+				<dt>Gebruiker</dt>
+				<dd>${artikel.user.naam}</dd>
 			</dl>
-			<spring:url value='/artikels/{id}/verwijderen' var='verwijderURL'>
-				<spring:param name='id' value='${artikel.id}' />
-			</spring:url>
-			<form:form action='${verwijderURL}' method='post'>
-				<input type='submit' value='Verwijderen'>
+			<c:choose>
+				<c:when test="${not empty artikel.reacties}">
+					<c:forEach items='${artikel.reacties}' var='reactie'>
+						<dl>
+							<dt>${reactie.user.naam}</dt>
+							<dd>${reactie.reactie}</dd>
+						</dl>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>Nog geen reacties</c:otherwise>
+			</c:choose>
+			<spring:url var='url' value='/reactie' />
+
+			<form:form action='${url}' method='post' commandName='reactieForm'>
+				<form:label path='reactie'>Reactie(max 255 tekens):<form:errors path='reactie' />
+				</form:label>
+				<form:textarea rows="5" cols="30" path='reactie.reactie'
+					autofocus='autofocus' required='required'/>
+				<form:input path='artikel.id' type="hidden" value="${artikel.id}" />
+				<input type='submit' value='Reageren' id='toevoegknop'>
+
 			</form:form>
-			<spring:url value='/artikels/{id}/wijzigen' var='wijzigURL'>
-				<spring:param name='id' value='${artikel.id}' />
-			</spring:url>
-			<form action='${wijzigURL}'>
-				<input type='submit' value='Wijzigen'>
-			</form>
 		</c:when>
 		<c:otherwise>
 			<div class='fout'>Artikel niet gevonden</div>
 		</c:otherwise>
 	</c:choose>
+
 </body>
 </html>

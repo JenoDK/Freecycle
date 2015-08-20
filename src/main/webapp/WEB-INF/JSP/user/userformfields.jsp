@@ -9,8 +9,7 @@
 </form:label>
 <form:password path="paswoord" required='required' />
 
-<form:label path='matchingPaswoord'>Paswoord herhalen:<form:errors
-		path='matchingPaswoord' />
+<form:label path='matchingPaswoord'>Paswoord herhalen:
 </form:label>
 <form:password path="matchingPaswoord" required='required' />
 <form:label path='email'>Email:<form:errors path='email' />

@@ -11,7 +11,7 @@ import javax.validation.Payload;
 
 import be.vdab.validators.PasswordMatchesValidator;
 
-@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PasswordMatchesValidator.class)
 @Documented

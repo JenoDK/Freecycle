@@ -9,7 +9,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
@@ -44,22 +43,24 @@ public class ArtikelController {
 	private static final String PER_REGIO_VIEW = "artikels/perregio";
 	private static final String WIJZIGEN_VIEW = "artikels/wijzigen";
 	private static final String REDIRECT_URL_NA_WIJZIGEN = "redirect:/artikels";
+	private static final String FORBIDDEN = "forbidden";
 
 	@Autowired
 	ArtikelController(ArtikelService artikelService, UserService userService) {
 		this.artikelService = artikelService;
 		this.userService = userService;
 	}
-	
-	//if you register artikel it binds it to the logged in user.
+
+	// if you register artikel it binds it to the logged in user.
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid Artikel artikel, BindingResult bindingResult,
-			HttpServletRequest request) {
+			HttpServletRequest request, Principal principal) {
 		if (bindingResult.hasErrors()) {
 			return TOEVOEGEN_VIEW;
 		}
-		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String currentUser = principal.getName();
+		User user = userService.findByNaamLike(currentUser);
 		artikel.setUser(user);
 		artikelService.create(artikel);
 		return REDIRECT_URL_NA_TOEVOEGEN;
@@ -83,7 +84,7 @@ public class ArtikelController {
 	ModelAndView read(@PathVariable Artikel artikel) {
 		ModelAndView modelAndView = new ModelAndView(ARTIKEL_VIEW);
 		if (artikel != null) {
-			modelAndView.addObject(artikel);
+			modelAndView.addObject(artikel).addObject(new ReactieForm());
 		}
 		return modelAndView;
 	}
@@ -111,14 +112,15 @@ public class ArtikelController {
 		Regio regio = new Regio();
 		return new ModelAndView(PER_REGIO_VIEW).addObject(regio);
 	}
-	
+
 	@InitBinder("regio")
 	void initBinderRegio(DataBinder dataBinder) {
 		dataBinder.setRequiredFields("regio");
 	}
 
 	@RequestMapping(method = RequestMethod.GET, params = { "regio" })
-	ModelAndView findByRegio(@ModelAttribute Regio regio, BindingResult bindingResult) {
+	ModelAndView findByRegio(@ModelAttribute Regio regio,
+			BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView(PER_REGIO_VIEW);
 		if (!bindingResult.hasErrors()) {
 			List<Artikel> artikels = artikelService.findByRegioLike(regio);
@@ -132,20 +134,30 @@ public class ArtikelController {
 	}
 
 	@RequestMapping(value = "{artikel}/wijzigen", method = RequestMethod.GET)
-	ModelAndView updateForm(@PathVariable Artikel artikel) {
+	ModelAndView updateForm(@PathVariable Artikel artikel, Principal principal) {
 		if (artikel == null) {
 			return new ModelAndView(REDIRECT_URL_ARTIKEL_NIET_GEVONDEN);
+		}
+		String currentUser = principal.getName();
+		if (!artikel.getUser().getNaam().equals(currentUser)) {
+			return new ModelAndView(FORBIDDEN);
 		}
 		return new ModelAndView(WIJZIGEN_VIEW).addObject(artikel);
 	}
 
 	@RequestMapping(value = "{id}/wijzigen", method = RequestMethod.POST)
-	String update(@Valid Artikel artikel, BindingResult bindingResult) {
+	String update(@Valid Artikel artikel, BindingResult bindingResult,
+			Principal principal) {
 		if (bindingResult.hasErrors()) {
 			return WIJZIGEN_VIEW;
 		}
+		String currentUser = principal.getName();
+		User user = userService.findByNaamLike(currentUser);
+		artikel.setUser(user);
 		artikelService.update(artikel);
 		return REDIRECT_URL_NA_WIJZIGEN;
 	}
+	
+	
 
 }

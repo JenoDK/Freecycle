@@ -14,8 +14,14 @@ public interface UserService {
 	void delete(long id);
 
 	List<User> findAll();
-	
+
 	long findAantalUsers();
-	
+
 	User findByEmailLike(String email);
+
+	User findByNaamLike(String naam);
+	
+	List<User> findByNaamNotLike(String naam);
+	
+	List<User> findByEmailNotLike(String email);
 }

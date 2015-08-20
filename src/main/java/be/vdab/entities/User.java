@@ -31,7 +31,7 @@ import be.vdab.constraints.PasswordMatches;
 @Entity
 @Table(name = "gebruikers")
 @XmlRootElement
-@PasswordMatches
+//@PasswordMatches
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -57,6 +57,9 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "user")
 	@OrderBy("id")
 	private Set<Artikel> artikels;
+	@OneToMany(mappedBy = "user")
+	@OrderBy("id")
+	private Set<Reactie> reacties;
 
 	public User() {
 	}
@@ -69,6 +72,7 @@ public class User implements Serializable {
 		this.actief = actief;
 		this.email = email;
 		artikels = new LinkedHashSet<>();
+		reacties = new LinkedHashSet<>();
 	}
 
 	public Set<Artikel> getArtikels() {
@@ -86,6 +90,24 @@ public class User implements Serializable {
 		artikels.remove(artikel);
 		if (artikel.getUser() == this) {
 			artikel.setUser(null);
+		}
+	}
+
+	public Set<Reactie> getReacties() {
+		return Collections.unmodifiableSet(reacties);
+	}
+
+	public void addReactie(Reactie reactie) {
+		reacties.add(reactie);
+		if (reactie.getUser() != this) {
+			reactie.setUser(this);
+		}
+	}
+
+	public void removeReactie(Reactie reactie) {
+		reacties.remove(reactie);
+		if (reactie.getUser() == this) {
+			reactie.setUser(null);
 		}
 	}
 
@@ -153,6 +175,10 @@ public class User implements Serializable {
 		if (rol.getUsers().contains(this)) {
 			rol.removeUser(this);
 		}
+	}
+
+	public int getArtikelscount() {
+		return artikels.size();
 	}
 
 	@Override

@@ -2,6 +2,8 @@
 <%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core'%>
 <%@taglib prefix='v' uri='http://vdab.be/tags'%>
 <%@taglib prefix='form' uri='http://www.springframework.org/tags/form'%>
+<%@ page import="net.tanesha.recaptcha.ReCaptcha"%>
+<%@ page import="net.tanesha.recaptcha.ReCaptchaFactory"%>
 <!doctype html>
 <html lang='nl'>
 <head>
@@ -13,6 +15,10 @@
 	<c:url value='/user' var='url' />
 	<form:form action='${url}' commandName='user' id='toevoegform'>
 		<jsp:include page='userformfields.jsp' />
+		<%
+          ReCaptcha c = ReCaptchaFactory.newReCaptcha("6Lf7XgsTAAAAANVtZnaqMJCtpqTTBjeatUaxEQqJ", "6Lf7XgsTAAAAADJQ940XN0Hwc6Qglw2pt2FUKhE1", false);
+          out.print(c.createRecaptchaHtml(null, null));
+        %>
 		<input type='submit' value='Toevoegen' id='toevoegknop'>
 	</form:form>
 	<script>

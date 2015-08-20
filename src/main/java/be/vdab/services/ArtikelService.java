@@ -3,6 +3,7 @@ package be.vdab.services;
 import java.util.List;
 
 import be.vdab.entities.Artikel;
+import be.vdab.entities.User;
 import be.vdab.valueobjects.Regio;
 
 
@@ -18,6 +19,8 @@ public interface ArtikelService {
 	List<Artikel> findAll();
 	
 	List<Artikel> findByRegioLike(Regio regio);
+	
+	List<Artikel> findByUser(User user);
 	
 	long findAantalArtikels();
 }
