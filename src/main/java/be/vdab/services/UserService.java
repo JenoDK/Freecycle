@@ -20,8 +20,9 @@ public interface UserService {
 	User findByEmailLike(String email);
 
 	User findByNaamLike(String naam);
+
+	List<User> findByIdNotLike(long id);
 	
-	List<User> findByNaamNotLike(String naam);
-	
-	List<User> findByEmailNotLike(String email);
+	void safeUpdate(User user) throws Exception;
+
 }

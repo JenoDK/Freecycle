@@ -42,7 +42,7 @@ public class ArtikelController {
 	private static final String VERWIJDERD_VIEW = "artikels/verwijderd";
 	private static final String PER_REGIO_VIEW = "artikels/perregio";
 	private static final String WIJZIGEN_VIEW = "artikels/wijzigen";
-	private static final String REDIRECT_URL_NA_WIJZIGEN = "redirect:/artikels";
+	private static final String REDIRECT_URL_NA_WIJZIGEN = "redirect:/user/mijnArtikels";
 	private static final String FORBIDDEN = "forbidden";
 
 	@Autowired

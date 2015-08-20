@@ -10,14 +10,18 @@ import be.vdab.dao.UserDAO;
 import be.vdab.entities.User;
 import be.vdab.exceptions.EmailExistsException;
 import be.vdab.exceptions.NameExistsException;
+import be.vdab.mail.MailSender;
+import be.vdab.mail.RandomStringGenerator;
 
 @ReadOnlyTransactionalService
 public class UserServiceImpl implements UserService {
 	private final UserDAO userDAO;
+	private final MailSender mailSender;
 
 	@Autowired
-	UserServiceImpl(UserDAO userDAO) {
+	UserServiceImpl(UserDAO userDAO, MailSender mailSender) {
 		this.userDAO = userDAO;
+		this.mailSender = mailSender;
 	}
 
 	@Override
@@ -32,6 +36,13 @@ public class UserServiceImpl implements UserService {
 					"There is an account with that email adress: "
 							+ user.getEmail());
 		}
+		if (!user.getPaswoord().equals(user.getMatchingPaswoord())) {
+			throw new IllegalArgumentException();
+		}
+		String geencrypteerd = new BCryptPasswordEncoder().encode(user
+				.getPaswoord());
+		user.setPaswoord(geencrypteerd);
+		user.setMatchingPaswoord(geencrypteerd);
 		user.setId(userDAO.save(user).getId());
 	}
 
@@ -70,15 +81,12 @@ public class UserServiceImpl implements UserService {
 	@ModifyingTransactionalServiceMethod
 	public void update(User user) throws RuntimeException {
 		if (nameExistUpdate(user)) {
-			throw new NameExistsException(
-					"There is an account with that username: " + user.getNaam());
+			throw new NameExistsException();
 		}
 		if (emailExistUpdate(user)) {
-			throw new EmailExistsException(
-					"There is an account with that email adress: "
-							+ user.getEmail());
+			throw new EmailExistsException();
 		}
-		if (!user.getPaswoord().equals(user.getMatchingPaswoord())){
+		if (!user.getPaswoord().equals(user.getMatchingPaswoord())) {
 			throw new IllegalArgumentException();
 		}
 		String geencrypteerd = new BCryptPasswordEncoder().encode(user
@@ -89,7 +97,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private boolean nameExistUpdate(User user) {
-		List<User> users = findByNaamNotLike(user.getNaam());
+		List<User> users = findByIdNotLike(user.getId());
 		for (User u : users) {
 			if (u.getNaam().equals(user.getNaam())) {
 				return true;
@@ -99,7 +107,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private boolean emailExistUpdate(User user) {
-		List<User> users = findByEmailNotLike(user.getEmail());
+		List<User> users = findByIdNotLike(user.getId());
 		for (User u : users) {
 			if (u.getEmail().equals(user.getEmail())) {
 				return true;
@@ -128,13 +136,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> findByNaamNotLike(String naam) {
-		return userDAO.findByNaamNotLike(naam);
+	public List<User> findByIdNotLike(long id) {
+		return userDAO.findByIdNotLike(id);
 	}
 
 	@Override
-	public List<User> findByEmailNotLike(String email) {
-		return userDAO.findByEmailNotLike(email);
+	@ModifyingTransactionalServiceMethod
+	public void safeUpdate(User user) throws Exception {
+		String newPassword = RandomStringGenerator.generateRandomString(8,
+				RandomStringGenerator.Mode.ALPHANUMERIC);
+		user.setPaswoord(newPassword);
+		user.setMatchingPaswoord(newPassword);
+		mailSender.nieuwPaswoordMail(user);
+		update(user);
 	}
 
 }

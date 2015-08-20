@@ -5,11 +5,11 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<v:head title='${user.naam}' />
+<v:head title='Account wijzigen' />
 </head>
 <body>
 	<v:menu />
-	<h1>${user.naam}</h1>
+	<h1>Account gegevens wijzigen</h1>
 	<spring:url value='/user/{id}/wijzigen' var='url'>
 		<spring:param name='id' value='${user.id}' />
 	</spring:url>
@@ -21,6 +21,6 @@
 		document.getElementById('toevoegform').onsubmit = function() {
 			document.getElementById('toevoegknop').disabled = true;
 		};
-	</script>
+		</script>
 </body>
 </html>

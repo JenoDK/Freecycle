@@ -1,0 +1,160 @@
+body {
+	padding: 50px 0px 30px 0px;
+	font-family: 'Droid Sans', sans-serif;
+	font-size: 100%;
+}
+
+div {
+	margin: 0px;
+	padding: 0px;
+	border: 0px none;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+h1 {
+	font-size: 34px;
+	font-weight: 400;
+	color: #fff;
+	text-align: center;
+	margin: 0px 0px 25px 0px;
+}
+
+.login {
+	width: 33%;
+	margin: 0 auto;
+	background: #F8F8F8;
+	border-radius: 4px;
+}
+
+.login-top {
+	background: #E9E9E9;
+	border-radius: 4px 4px 0px 0px;
+	padding: 11px 0px;
+	text-align: center;
+}
+
+.login-top h2 {
+	font-size: 30px;
+	font-weight: 700;
+	color: #7A7A7A;
+}
+
+.login-top h3 {
+	font-size: 15px;
+	font-weight: 600;
+	color: #7A7A7A;
+}
+
+.login-bottom {
+	padding: 23px 23px 23px 23px;
+}
+
+.user, .user-in {
+	border-width: 2px 1px 1px;
+	border-style: solid;
+	border-color: #EDEDED;
+	-moz-border-top-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	border-image: none;
+	background: #FFF none repeat scroll 0% 0%;
+	border-radius: 5px;
+	margin-bottom: 1em;
+}
+
+.user input[type="text"], .user-in input[type="password"] {
+	background: none;
+	outline: none;
+	font-size: 15px;
+	font-weight: 600;
+	color: #BBBBBB;
+	padding: 17px 15px 17px 15px;
+	border: none;
+	width: 85%;
+	-webkit-appearance: none;
+}
+
+.user i {
+	background: url(../images/user.png) no-repeat 0px 0px;
+	width: 27px;
+	height: 27px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.user-in i {
+	background: url(../images/key.png) no-repeat 0px 7px;
+	width: 27px;
+	height: 27px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.keepme {
+	padding: 6px 0px;
+	width: 100%;
+}
+
+.keep-loginbutton {
+	float: right;
+}
+
+.keep-loginbutton input[type="submit"] {
+	color: #FFF;
+	font-size: 17px;
+	font-weight: 600;
+	width: 93%;
+	padding: 8px 26px;
+	border-radius: 5px;
+	margin: 0px;
+	display: inline-block;
+	cursor: pointer;
+	outline: medium none;
+	border: medium none;
+	background: #E21B1B none repeat scroll 0% 0%;
+	float: right;
+}
+
+.forgot {
+	padding: 15px 0px;
+}
+
+.forgot p {
+	float: left;
+}
+
+.forgot p a {
+	font-size: 14px;
+	font-weight: 600;
+	color: #000;
+}
+
+.forgot-register {
+	float: right;
+}
+
+.forgot-register p {
+	font-size: 14px;
+	font-weight: 600;
+	color: #878787;
+}
+
+.forgot-register p a {
+	color: #000;
+}
+
+.forgot p a {
+	font-size: 14px;
+	font-weight: 600;
+	color: #000;
+}
+
+a {
+	text-decoration: none;
+}
+
+.clear {
+	clear: both;
+}

@@ -39,10 +39,13 @@
 			<spring:url var='url' value='/reactie' />
 
 			<form:form action='${url}' method='post' commandName='reactieForm'>
-				<form:label path='reactie'>Reactie(max 255 tekens):<form:errors path='reactie' />
+				<form:label path='reactie'>Reactie(max 255 tekens):<form:errors
+						path='reactie' />
 				</form:label>
-				<form:textarea rows="5" cols="30" path='reactie.reactie'
-					autofocus='autofocus' required='required'/>
+				<form:textarea id="textarea" rows="5" cols="30"
+					path='reactie.reactie' autofocus='autofocus' required='required'
+					maxlength="255" />
+					<p id="count"></p>
 				<form:input path='artikel.id' type="hidden" value="${artikel.id}" />
 				<input type='submit' value='Reageren' id='toevoegknop'>
 
@@ -52,6 +55,10 @@
 			<div class='fout'>Artikel niet gevonden</div>
 		</c:otherwise>
 	</c:choose>
-
+	<script>
+	document.getElementById('textarea').onkeyup = function () {
+		  document.getElementById('count').innerHTML = "Characters left: " + (255 - this.value.length);
+		};
+	</script>
 </body>
 </html>

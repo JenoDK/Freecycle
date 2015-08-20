@@ -4,12 +4,11 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<v:head title='Account aangemaakt' />
+<v:head title='Paswoord reset' />
 </head>
 <body>
 	<v:menu />
-	<h1>Het account is aangepast.</h1>
-	<h1>Opnieuw <a href="<c:url value='/login'/>">aanmelden</a> is vereist</h1>
+	<h1>Het paswoord is aangepast, chech uw mail inbox</h1>
 	<c:if test='${not empty param.fout}'>
 		<div class='fout'>${param.fout}</div>
 	</c:if>

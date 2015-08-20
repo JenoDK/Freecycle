@@ -7,6 +7,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 import be.vdab.dao.CreateDAOBeans;
 import be.vdab.datasource.CreateDataSourceBean;
+import be.vdab.mail.CreateMailBeans;
 import be.vdab.security.CreateSecurityFilter;
 import be.vdab.services.CreateServiceBeans;
 
@@ -20,7 +21,7 @@ public class Initializer extends
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
 		return new Class<?>[] { CreateDataSourceBean.class,
-				CreateDAOBeans.class, CreateServiceBeans.class, CreateSecurityFilter.class };
+				CreateDAOBeans.class, CreateServiceBeans.class, CreateSecurityFilter.class, CreateMailBeans.class };
 	}
 
 	@Override

@@ -26,7 +26,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.SafeHtml;
 
-import be.vdab.constraints.PasswordMatches;
 
 @Entity
 @Table(name = "gebruikers")

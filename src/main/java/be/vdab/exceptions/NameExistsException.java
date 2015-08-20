@@ -7,4 +7,8 @@ public class NameExistsException extends RuntimeException {
 		super(message);
 	}
 
+	public NameExistsException() {
+		super();
+	}
+
 }

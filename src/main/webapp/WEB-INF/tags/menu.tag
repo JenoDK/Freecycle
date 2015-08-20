@@ -19,13 +19,12 @@
 		<security:authorize access='isAuthenticated ()'>
 			<li><a href="#"><security:authentication property="name" /></a>
 				<ul>
-					<li>
-					<spring:url value='/user/gegevens' var='wijzigURL'/>
-					<form action='${wijzigURL}'>
-						<input type='submit' value='Mijn Accountgegevens' id='logoutbutton'>
-						<security:csrfInput />
-					</form>
-					</li>
+					<li><spring:url value='/user/gegevens' var='wijzigURL' />
+						<form action='${wijzigURL}'>
+							<input type='submit' value='Mijn Accountgegevens'
+								id='logoutbutton'>
+							<security:csrfInput />
+						</form></li>
 					<li><a href="<c:url value='/user/mijnArtikels'/>">Mijn
 							Artikels</a></li>
 					<li>
@@ -39,7 +38,9 @@
 					</li>
 				</ul></li>
 		</security:authorize>
-		<li><a href="<c:url value='/user/toevoegen'/>">Account
-				aanmaken</a></li>
+		<security:authorize access='isAnonymous()'>
+			<li><a href="<c:url value='/user/toevoegen'/>">Account
+					aanmaken</a></li>
+		</security:authorize>
 	</ul>
 </nav>

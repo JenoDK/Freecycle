@@ -11,7 +11,6 @@ public interface UserDAO extends JpaRepository<User, Long> {
 
 	User findByNaamLike(String naam);
 
-	List<User> findByNaamNotLike(String naam);
+	List<User> findByIdNotLike(long id);
 
-	List<User> findByEmailNotLike(String email);
 }
