@@ -6,11 +6,16 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<v:head title='Artikels per regio' />
+<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
+	rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<v:menu />
-	<h1>Artikels per regio</h1>
+	<div class="login">
+		<div class="login-top">
+			<h2>Artikels per regio</h2>
+	</div>
 	<c:url value='/artikels' var='url' />
 	<form:form action="${url}" commandName='regio' method='get'>
 		<form:label path='regio'>Regio:<form:errors path='regio' />
@@ -40,5 +45,6 @@
 			<dd>${artikel.regio}</dd>
 		</dl>
 	</c:forEach>
+	</div>
 </body>
 </html>

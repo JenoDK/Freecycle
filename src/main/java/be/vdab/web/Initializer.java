@@ -33,4 +33,5 @@ public class Initializer extends
 	protected Filter[] getServletFilters() {
 		return new Filter[] { new OpenEntityManagerInViewFilter() };
 	}
+	
 }

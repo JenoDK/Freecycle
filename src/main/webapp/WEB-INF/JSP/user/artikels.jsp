@@ -6,11 +6,16 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<v:head title='Artikels' />
+<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
+	rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<v:menu />
-	<h1>Mijn artikels</h1>
+	<div class="login">
+		<div class="login-top">
+			<h2>Mijn artikels</h2>
+	</div>
 	<c:forEach items='${artikels}' var='artikel'>
 		<h2>
 			<spring:url var='url' value='/artikels/{id}'>
@@ -36,5 +41,6 @@
 			<input type='submit' value='Wijzigen'>
 		</form>
 	</c:forEach>
+	</div>
 </body>
 </html>

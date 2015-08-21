@@ -6,11 +6,16 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<v:head title='Artikels' />
+<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
+	rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<v:menu />
-	<h1>${user.naam}</h1>
+	<div class="login">
+		<div class="login-top">
+			<h2>Gegevens van ${user.naam}</h2>
+	</div>
 	<dl>
 		<dt>email</dt>
 		<dd>${user.email}</dd>
@@ -29,5 +34,6 @@
 	<form action='${wijzigURL}'>
 		<input type='submit' value='Wijzigen'>
 	</form>
+	</div>
 </body>
 </html>

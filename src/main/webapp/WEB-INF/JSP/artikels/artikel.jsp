@@ -6,58 +6,67 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<v:head title='${artikel.naam}' />
+<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
+	rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<v:menu />
 	<c:choose>
 		<c:when test="${not empty artikel}">
-			<h1>${artikel.naam}</h1>
-			<dl>
-				<dt>Soort</dt>
-				<dd>${artikel.soort.id}</dd>
-				<dt>Geschatte waarde</dt>
-				<dd>&euro; ${artikel.geschatteWaarde}</dd>
-				<dt>Ouderdom</dt>
-				<dd>${artikel.ouderdom.id}</dd>
-				<dt>Regio</dt>
-				<dd>${artikel.regio}</dd>
-				<dt>Gebruiker</dt>
-				<dd>${artikel.user.naam}</dd>
+			<div class="login">
+				<div class="login-top">
+					<h2>${artikel.naam}</h2>
+			</div>
+				<dl>
+					<dt>Soort</dt>
+					<dd>${artikel.soort.id}</dd>
+					<dt>Geschatte waarde</dt>
+					<dd>&euro; ${artikel.geschatteWaarde}</dd>
+					<dt>Ouderdom</dt>
+					<dd>${artikel.ouderdom.id}</dd>
+					<dt>Regio</dt>
+					<dd>${artikel.regio}</dd>
+					<dt>Gebruiker</dt>
+					<dd>${artikel.user.naam}</dd>
 			</dl>
+			<c:url value='/file/show/${artikel.id}'
+			var='url' /> <img class="artikelFoto" src="${url}" alt="" /> 
 			<c:choose>
-				<c:when test="${not empty artikel.reacties}">
-					<c:forEach items='${artikel.reacties}' var='reactie'>
-						<dl>
-							<dt>${reactie.user.naam}</dt>
-							<dd>${reactie.reactie}</dd>
-						</dl>
-					</c:forEach>
-				</c:when>
-				<c:otherwise>Nog geen reacties</c:otherwise>
-			</c:choose>
-			<spring:url var='url' value='/reactie' />
-
-			<form:form action='${url}' method='post' commandName='reactieForm'>
-				<form:label path='reactie'>Reactie(max 255 tekens):<form:errors
-						path='reactie' />
-				</form:label>
-				<form:textarea id="textarea" rows="5" cols="30"
-					path='reactie.reactie' autofocus='autofocus' required='required'
-					maxlength="255" />
+					<c:when test="${not empty artikel.reacties}">
+						<c:forEach items='${artikel.reacties}' var='reactie'>
+							<dl>
+								<dt>${reactie.user.naam}</dt>
+								<dd>${reactie.reactie}</dd>
+							</dl>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>Nog geen reacties</c:otherwise>
+				</c:choose> <spring:url var='url' value='/reactie' /> <form:form
+					action='${url}' method='post' commandName='reactieForm'>
+					<form:label path='reactie'>Reactie(max 255 tekens):<form:errors
+							path='reactie' />
+					</form:label>
+					<form:textarea id="textarea" rows="5" cols="30"
+						path='reactie.reactie' autofocus='autofocus' required='required'
+						maxlength="255" />
 					<p id="count"></p>
-				<form:input path='artikel.id' type="hidden" value="${artikel.id}" />
-				<input type='submit' value='Reageren' id='toevoegknop'>
+					<form:input path='artikel.id' type="hidden" value="${artikel.id}" />
+					<input type='submit' value='Reageren' id='toevoegknop'>
 
-			</form:form>
+				</form:form>
+			</div>
 		</c:when>
 		<c:otherwise>
 			<div class='fout'>Artikel niet gevonden</div>
 		</c:otherwise>
 	</c:choose>
+	<div class="login"></div>
+
 	<script>
-	document.getElementById('textarea').onkeyup = function () {
-		  document.getElementById('count').innerHTML = "Characters left: " + (255 - this.value.length);
+		document.getElementById('textarea').onkeyup = function() {
+			document.getElementById('count').innerHTML = "Characters left: "
+					+ (255 - this.value.length);
 		};
 	</script>
 </body>

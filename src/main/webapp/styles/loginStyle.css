@@ -1,7 +1,123 @@
 body {
-	padding: 50px 0px 30px 0px;
+	padding: 0px 0px 30px 0px;
 	font-family: 'Droid Sans', sans-serif;
 	font-size: 100%;
+	background-color: #e3ecf0;
+}
+
+#logo {
+	margin-top: 20px;
+	width: 35%;
+}
+
+#aanmeldenlogo {
+	width: 20px;
+	float: right;
+	padding: 0 10px 0 0;
+}
+
+.artikelFoto {
+	width: 100%;
+}
+
+#wrap {
+	width: 70%; /* Spans the width of the page */
+	height: 50px;
+	margin: 0 auto;
+	/* Ensures there is no space between sides of the screen and the menu */
+	z-index: 99;
+	/* Makes sure that your menu remains on top of other page elements */
+	position: relative;
+	background-color: #366b82;
+}
+
+.navbar {
+	width: 100%;
+	height: 50px;
+	padding: 0;
+	margin: 0;
+	position: absolute;
+	/* Ensures that the menu doesn’t affect other elements */
+	border-right: 1px solid #54879d;
+	border-radius: 4px 4px 0px 0px;
+	height: 50px;
+}
+
+.navbar li {
+	height: auto;
+	width: 150px; /* Each menu item is 150px wide */
+	float: left; /* This lines up the menu items horizontally */
+	text-align: center; /* All text is placed in the center of the box */
+	list-style: none;
+	/* Removes the default styling (bullets) for the list */
+	font: normal bold 12px/1.2em Arial, Verdana, Helvetica;
+	padding: 0;
+	margin: 0;
+	background-color: #366b82;
+	display: inline-block;
+}
+
+.navbar li:hover {
+	background-color: #54879d;
+}
+
+.navbar li.rightMenu {
+	float: right;
+}
+
+.navbar a {
+	padding: 18px 0;
+	/* Adds a padding on the top and bottom so the text appears centered vertically */
+	border-left: 1px solid #54879d;
+	/* Creates a border in a slightly lighter shade of blue than the background.  Combined with the right border, this creates a nice effect. */
+	border-right: 1px solid #1f5065;
+	/* Creates a border in a slightly darker shade of blue than the background.  Combined with the left border, this creates a nice effect. */
+	text-decoration: none; /* Removes the default hyperlink styling. */
+	color: white; /* Text color is white */
+	display: block;
+}
+
+.navbar li ul {
+	display: none; /* Hides the drop-down menu */
+	height: auto;
+	margin: 0; /* Aligns drop-down box underneath the menu item */
+	padding: 0; /* Aligns drop-down box underneath the menu item */
+}
+
+.navbar li:hover ul {
+	display: block;
+	/* Displays the drop-down box when the menu item is hovered over */
+}
+
+.navbar li ul li {
+	background-color: #54879d;
+}
+
+.navbar li ul li a {
+	border-left: 1px solid #1f5065;
+	border-right: 1px solid #1f5065;
+	border-top: 1px solid #74a3b7;
+	border-bottom: 1px solid #1f5065;
+}
+
+.navbar li ul li a:hover {
+	background-color: #366b82;
+}
+
+.submitLink {
+	width: 150px;
+	padding: 18px 0;
+	background-color: #54879d;
+	border-left: 1px solid #1f5065;
+	border-right: 1px solid #1f5065;
+	border-top: 1px solid #74a3b7;
+	border-bottom: 1px solid #1f5065;
+	color: white;
+	cursor: pointer;
+}
+
+.submitLink:hover {
+	background-color: #366b82;
 }
 
 div {
@@ -22,13 +138,13 @@ h1 {
 
 .login {
 	width: 33%;
-	margin: 0 auto;
+	margin: 50px auto;
 	background: #F8F8F8;
 	border-radius: 4px;
 }
 
 .login-top {
-	background: #E9E9E9;
+	background: #d7e7ee;
 	border-radius: 4px 4px 0px 0px;
 	padding: 11px 0px;
 	text-align: center;
@@ -50,10 +166,10 @@ h1 {
 	padding: 23px 23px 23px 23px;
 }
 
-.user, .user-in {
+.user, .user-in, .user-mail {
 	border-width: 2px 1px 1px;
 	border-style: solid;
-	border-color: #EDEDED;
+	border-color: #ededed;
 	-moz-border-top-colors: none;
 	-moz-border-right-colors: none;
 	-moz-border-bottom-colors: none;
@@ -64,12 +180,13 @@ h1 {
 	margin-bottom: 1em;
 }
 
-.user input[type="text"], .user-in input[type="password"] {
+.user input[type="text"], .user-in input[type="password"], .user-mail input[type="email"]
+	{
 	background: none;
 	outline: none;
 	font-size: 15px;
 	font-weight: 600;
-	color: #BBBBBB;
+	color: #616161;
 	padding: 17px 15px 17px 15px;
 	border: none;
 	width: 85%;
@@ -92,6 +209,14 @@ h1 {
 	vertical-align: middle;
 }
 
+.user-mail i {
+	background: url(../images/email.png) no-repeat 0px 0px;
+	width: 27px;
+	height: 27px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
 .keepme {
 	padding: 6px 0px;
 	width: 100%;
@@ -101,7 +226,12 @@ h1 {
 	float: right;
 }
 
-.keep-loginbutton input[type="submit"] {
+.keep-registrerenbutton {
+	float: left;
+}
+
+.keep-loginbutton input[type="submit"], .keep-registrerenbutton input[type="submit"],
+	.keep-loginbutton2 input[type="submit"] {
 	color: #FFF;
 	font-size: 17px;
 	font-weight: 600;
@@ -113,8 +243,17 @@ h1 {
 	cursor: pointer;
 	outline: medium none;
 	border: medium none;
-	background: #E21B1B none repeat scroll 0% 0%;
+	background: #366b82 none repeat scroll 0% 0%;
 	float: right;
+}
+
+.keep-loginbutton2 input[type="submit"] {
+	margin: 10px 0px;
+	width: 100%;
+}
+
+.keep-registrerenbutton input[type="submit"] {
+	float: left;
 }
 
 .forgot {
@@ -158,3 +297,36 @@ a {
 .clear {
 	clear: both;
 }
+
+.fout {
+	padding: 0 0 10px 4px;
+	color: red;
+}
+
+/* SELECT DROPDOWN STYLING */
+select {
+	width: 150px;
+	padding: 3px;
+	margin: 0;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+	-moz-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+	box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+	background: #fff;
+	color: #888;
+	border: none;
+	outline: none;
+	display: inline-block;
+	appearance: none;
+	cursor: pointer;
+}
+
+/* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	select {
+		padding-right: 18px
+	}
+}
+

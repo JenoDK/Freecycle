@@ -4,9 +4,9 @@
 	uri='http://www.springframework.org/security/tags'%>
 <%@taglib prefix='spring' uri='http://www.springframework.org/tags'%>
 <%@taglib prefix='form' uri='http://www.springframework.org/tags/form'%>
-<nav>
-	<ul>
-		<li><a href="<c:url value='/'/>">&#8962;</a></li>
+<div id="wrap">
+	<ul class="navbar">
+		<li><a href="<c:url value='/'/>">Home</a></li>
 		<li><a href="#">Artikels</a>
 			<ul>
 				<li><a href="<c:url value='/artikels'/>">Lijst</a></li>
@@ -14,23 +14,23 @@
 				<li><a href="<c:url value='/artikels/regio'/>">Per regio</a></li>
 			</ul></li>
 		<security:authorize access='isAnonymous()'>
-			<li><a href="<c:url value='/login'/>">Aanmelden</a></li>
+			<li class="rightMenu"><a href="<c:url value='/login'/>">Inloggen<img id="aanmeldenlogo" src="<c:url value="/images/user2.png" />"/></a></li>
 		</security:authorize>
 		<security:authorize access='isAuthenticated ()'>
-			<li><a href="#"><security:authentication property="name" /></a>
+			<li class="rightMenu"><a href="#"><security:authentication property="name" /><img id="aanmeldenlogo" src="<c:url value="/images/user2.png" />"/></a>
 				<ul>
 					<li><spring:url value='/user/gegevens' var='wijzigURL' />
 						<form action='${wijzigURL}'>
-							<input type='submit' value='Mijn Accountgegevens'
+							<input type='submit' class="submitLink" value='Mijn Accountgegevens'
 								id='logoutbutton'>
 							<security:csrfInput />
-						</form></li>
+						</form>
 					<li><a href="<c:url value='/user/mijnArtikels'/>">Mijn
 							Artikels</a></li>
 					<li>
 						<form method='post' action='<c:url value="/logout"/>'
 							id='logoutform'>
-							<input type='submit'
+							<input type='submit' class="submitLink" 
 								value='<security:authentication property="name"/> afmelden'
 								id='logoutbutton'>
 							<security:csrfInput />
@@ -39,8 +39,8 @@
 				</ul></li>
 		</security:authorize>
 		<security:authorize access='isAnonymous()'>
-			<li><a href="<c:url value='/user/toevoegen'/>">Account
-					aanmaken</a></li>
+			<li class="rightMenu"><a href="<c:url value='/user/toevoegen'/>">Registreren</a></li>
 		</security:authorize>
 	</ul>
-</nav>
+</div>
+<div class="clear"></div>

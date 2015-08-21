@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -46,6 +47,7 @@ public class Artikel implements Serializable {
 	@NumberFormat(style = Style.NUMBER)
 	@NotNull
 	@Min(0)
+	@Max(20000)
 	@Digits(integer = 10, fraction = 2)
 	private BigDecimal geschatteWaarde;
 	@NotNull

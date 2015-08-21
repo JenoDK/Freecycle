@@ -18,46 +18,36 @@
 		<div class="login-top">
 			<h2>Welkom</h2>
 			<h3>Aanmelden</h3>
-		</div>
+	</div>
 		<div class="login-bottom">
 			<form method='post'>
-				<div class="user">
-					<input name='username' autofocus required type="text"
-						value="Username" onfocus="this.value = '';"
-						onblur="if (this.value == '') {this.value = 'Username';}"><i></i>
-				</div>
-				<div class="user-in">
-					<input name='password' type='password' required type="password"
-						value="Password" onfocus="this.value = '';"
-						onblur="if (this.value == '') {this.value = 'Password';}"><i></i>
-				</div>
-				<div class='keepme'>
-					<div class="keep-loginbutton">
-						<security:csrfInput />
-						<input type='submit' value='Aanmelden'>
-					</div>
-					<div class="clear"></div>
-				</div>
-			</form>
-			<c:if test='${param.error != null}'>
-				<div class='fout'>Verkeerde gebruikersnaam of paswoord.</div>
-			</c:if>
-			<div class="clear"></div>
-			<div class="forgot">
-				<spring:url var='url' value='/user/forgotPassword' />
-				<p>
-					<a href='${url}'>Paswoord vergeten?</a>
-				</p>
-				<div class="forgot-register">
-					<p>
-						Nog geen account? <a href="<c:url value='/user/toevoegen'/>">Registreer
-							nu</a>
-					</p>
-				</div>
-				<div class="clear"></div>
+				<div class="user"><input name='username' required type="text"
+					placeholder="Gebruikersnaam" ><i></i>
 			</div>
+				<div class="user-in"><input name='password' type='password'
+					required type="password" placeholder="Paswoord"
+					><i></i>
+			</div> <c:if test='${param.error != null}'>
+					<span class='fout'>Verkeerde gebruikersnaam of paswoord.</span>
+				</c:if>
+				<div class='keepme'>
+					<div class="keep-loginbutton"><security:csrfInput /> <input
+						type='submit' value='Aanmelden'></div>
+					<div class="clear"></div>
+			</div>
+		</form>
+			<div class="clear"></div>
+			<div class="forgot"><spring:url var='url'
+					value='/user/forgotPassword' />
+				<p><a href='${url}'>Paswoord vergeten?</a></p>
+				<div class="forgot-register">
+					<p>Nog geen account? <a href="<c:url value='/user/toevoegen'/>">Registreer
+							nu</a>
+				</p>
+			</div>
+				<div class="clear"></div></div>
 
-		</div>
 	</div>
+</div>
 </body>
 </html>

@@ -4,11 +4,17 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<v:head title='Paswoord reset' />
+<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
+	rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<v:menu />
-	<h1>Het paswoord is aangepast, chech uw mail inbox</h1>
+	<div class="login">
+		<div class="login-top">
+			<h2>Het paswoord is aangepast, </h2><h2>check de inbox van uw mailaccount</h2>
+	</div>
+	</div>
 	<c:if test='${not empty param.fout}'>
 		<div class='fout'>${param.fout}</div>
 	</c:if>

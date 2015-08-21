@@ -54,14 +54,20 @@ public class CreateSecurityFilter extends WebSecurityConfigurerAdapter {
 				.logoutSuccessUrl("/")
 				.and()
 				.authorizeRequests()
-				.antMatchers("/artikels/toevoegen", "/artikels/*/wijzigen", "/artikels/*/verwijderen", "/artikels/regio")
+				.antMatchers("/artikels/toevoegen", "/artikels/*/wijzigen",
+						"/artikels/*/verwijderen", "/artikels/regio",
+						"/file/uploadFile", "/file/upload",
+						"/file/uploadFile", "/file/show/*", "/file/upload/*")
 				.hasAnyAuthority(USER, ADMIN)
 				.antMatchers(HttpMethod.POST, "/artikels")
 				.hasAnyAuthority(USER, ADMIN)
 				.antMatchers(HttpMethod.PUT, "/artikels/*")
 				.hasAuthority(ADMIN)
 				.antMatchers(HttpMethod.DELETE, "/artikels/*")
-				.hasAuthority(ADMIN).antMatchers("/", "/login", "/user", "/user/toevoegen", "/user/forgotPassword", "/user/forgotPasswordSucces", "/user/forgotPassword/reset").permitAll()
+				.hasAuthority(ADMIN)
+				.antMatchers("/", "/login", "/user", "/user/toevoegen",
+						"/user/forgotPassword", "/user/forgotPasswordSucces",
+						"/user/forgotPassword/reset").permitAll()
 				.antMatchers("/**").authenticated().and().exceptionHandling()
 				.accessDeniedPage("/WEB-INF/JSP/forbidden.jsp");
 		http.httpBasic();

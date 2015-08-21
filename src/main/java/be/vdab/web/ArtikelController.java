@@ -35,7 +35,7 @@ public class ArtikelController {
 	private final UserService userService;
 	private static final String ARTIKELS_VIEW = "artikels/artikels";
 	private static final String TOEVOEGEN_VIEW = "artikels/toevoegen";
-	private static final String REDIRECT_URL_NA_TOEVOEGEN = "redirect:/artikels";
+	private static final String REDIRECT_URL_NA_TOEVOEGEN = "redirect:/file/upload/{artikel}";
 	private static final String ARTIKEL_VIEW = "artikels/artikel";
 	private static final String REDIRECT_URL_ARTIKEL_NIET_GEVONDEN = "redirect:/artikels";
 	private static final String REDIRECT_URL_NA_VERWIJDEREN = "redirect:/artikels/{id}/verwijderd";
@@ -55,7 +55,8 @@ public class ArtikelController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid Artikel artikel, BindingResult bindingResult,
-			HttpServletRequest request, Principal principal) {
+			HttpServletRequest request, Principal principal,
+			RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
 			return TOEVOEGEN_VIEW;
 		}
@@ -63,6 +64,7 @@ public class ArtikelController {
 		User user = userService.findByNaamLike(currentUser);
 		artikel.setUser(user);
 		artikelService.create(artikel);
+		redirectAttributes.addAttribute("artikel", artikel.getId());
 		return REDIRECT_URL_NA_TOEVOEGEN;
 	}
 

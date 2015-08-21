@@ -9,6 +9,7 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -30,6 +31,14 @@ public class CreateControllerBeans extends WebMvcConfigurerAdapter {
 		resolver.setPrefix("/WEB-INF/JSP/");
 		resolver.setSuffix(".jsp");
 		return resolver;
+	}
+	
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+	    CommonsMultipartResolver resolver=new CommonsMultipartResolver();
+	    resolver.setMaxUploadSize(20971520);
+	    resolver.setMaxInMemorySize(1048576);
+	    return resolver;
 	}
 	
 	@Override
