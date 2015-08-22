@@ -20,7 +20,10 @@
 				var='url' />
 			<form method="post" action="${url}" enctype="multipart/form-data">
 
-				<div><input type="file" name="uploadFile" size="50" /></div>
+				<div><input type="file" name="uploadFile" size="50" /></div> <c:if
+					test='${not empty param.fout}'>
+					<div class='fout'>${param.fout}</div>
+				</c:if>
 
 				<div><input name="artikelid" type="hidden"
 					value="${artikel.id}" /></div>
@@ -29,9 +32,9 @@
 
 		</form>
 			<form method='get' action='<c:url value="/artikels/${artikel.id}"/>'>
-				<input type='submit' class="submitLink"
-				value='Doorgaan zonder foto'>
+				<input type='submit' class="submitLink" value='Doorgaan zonder foto'>
 		</form></div>
+
 </div>
 </body>
 </html>

@@ -32,6 +32,13 @@ public class FileUploadServiceImpl implements FileUploadService {
 		return fileUploadDAO.findByArtikel(artikel);
 	}
 	
-	
+	@Override
+	@ModifyingTransactionalServiceMethod
+	public void delete(long id) {
+		UploadFile uploadFile = fileUploadDAO.findOne(id);
+		if (uploadFile != null) {
+			fileUploadDAO.delete(id);
+		}
+	}
 
 }

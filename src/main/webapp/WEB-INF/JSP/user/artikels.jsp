@@ -40,6 +40,12 @@
 		<form action='${wijzigURL}'>
 			<input type='submit' value='Wijzigen'>
 		</form>
+		<spring:url value='/file/upload/{id}' var='uploadURL'>
+			<spring:param name='id' value='${artikel.id}' />
+		</spring:url>
+		<form action='${uploadURL}'>
+			<input type='submit' value='Foto uploaden'>
+		</form>
 	</c:forEach>
 	</div>
 </body>

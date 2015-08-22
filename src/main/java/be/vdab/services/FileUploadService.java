@@ -8,5 +8,7 @@ public interface FileUploadService {
 	
 	UploadFile read(long upload_id);
 	
+	void delete(long id);
+	
 	UploadFile findByArtikel(Artikel artikel);
 }

@@ -93,9 +93,13 @@ public class ArtikelController {
 
 	@RequestMapping(value = "{artikel}/verwijderen", method = RequestMethod.POST)
 	String delete(@PathVariable Artikel artikel,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, Principal principal) {
 		if (artikel == null) {
 			return REDIRECT_URL_ARTIKEL_NIET_GEVONDEN;
+		}
+		String currentUser = principal.getName();
+		if (!artikel.getUser().getNaam().equals(currentUser)) {
+			return FORBIDDEN;
 		}
 		long id = artikel.getId();
 		artikelService.delete(id);

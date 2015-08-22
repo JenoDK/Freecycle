@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -63,9 +64,12 @@ public class Artikel implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "userid")
 	private User user;
-	@OneToMany(mappedBy = "artikel")
+	@OneToMany(mappedBy = "artikel", cascade=CascadeType.REMOVE)
 	@OrderBy("id")
 	private Set<Reactie> reacties;
+	@OneToMany(mappedBy = "artikel", cascade=CascadeType.REMOVE)
+	@OrderBy("id")
+	private Set<UploadFile> uploadFiles;
 
 	public Artikel() {
 	}
@@ -78,6 +82,7 @@ public class Artikel implements Serializable {
 		this.ouderdom = ouderdom;
 		this.regio = regio;
 		reacties = new LinkedHashSet<>();
+		uploadFiles = new LinkedHashSet<>();
 	}
 
 	public Set<Reactie> getReacties() {
@@ -95,6 +100,24 @@ public class Artikel implements Serializable {
 		reacties.remove(reactie);
 		if (reactie.getArtikel() == this) {
 			reactie.setArtikel(null);
+		}
+	}
+	
+	public Set<UploadFile> getUploadFiles() {
+		return Collections.unmodifiableSet(uploadFiles);
+	}
+
+	public void addUploadFile(UploadFile uploadFile) {
+		uploadFiles.add(uploadFile);
+		if (uploadFile.getArtikel() != this) {
+			uploadFile.setArtikel(this);
+		}
+	}
+
+	public void removeUploadFile(UploadFile uploadFile) {
+		uploadFiles.remove(uploadFile);
+		if (uploadFile.getArtikel() == this) {
+			uploadFile.setArtikel(null);
 		}
 	}
 

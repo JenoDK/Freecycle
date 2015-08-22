@@ -4,13 +4,20 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<v:head title='Filiaal ${naam} verwijderd' />
+<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
+	rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<v:menu />
-	<h1>Het artikel ${naam} is verwijderd.</h1>
+	<div class="login">
+
+		<div class="login-top">
+			<h2>Het artikel ${naam} is verwijderd.</h2>
+	</div>
 	<c:if test='${not empty param.fout}'>
 		<div class='fout'>${param.fout}</div>
 	</c:if>
+	</div>
 </body>
 </html>

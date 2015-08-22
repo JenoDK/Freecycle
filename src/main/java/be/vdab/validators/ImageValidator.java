@@ -8,7 +8,7 @@ public class ImageValidator {
 	private Pattern pattern;
 	private Matcher matcher;
 
-	private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
+	private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(/bmp|jpg|gif|png))$)";
 
 	public ImageValidator() {
 		pattern = Pattern.compile(IMAGE_PATTERN);

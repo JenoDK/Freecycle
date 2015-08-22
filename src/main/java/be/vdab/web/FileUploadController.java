@@ -1,5 +1,7 @@
 package be.vdab.web;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,9 @@ public class FileUploadController {
 	private final ArtikelService artikelService;
 	private static final String UPLOAD_VIEW = "file/upload";
 	private static final String SUCCES_VIEW = "redirect:/artikels/{id}";
+	private static final String REDIRECT_URL_ARTIKEL_NIET_GEVONDEN = "redirect:/artikels";
+	private static final String FORBIDDEN = "forbidden";
+	private static final String UPLOAD_VIEW_AFTER_FAIL = "redirect:/file/upload/{artikel}";
 
 	@Autowired
 	FileUploadController(FileUploadService fileUploadService,
@@ -33,7 +38,14 @@ public class FileUploadController {
 	}
 
 	@RequestMapping(value = "upload/{artikel}", method = RequestMethod.GET)
-	ModelAndView createForm(@PathVariable Artikel artikel) {
+	ModelAndView createForm(@PathVariable Artikel artikel, Principal principal) {
+		if (artikel == null) {
+			return new ModelAndView(REDIRECT_URL_ARTIKEL_NIET_GEVONDEN);
+		}
+		String currentUser = principal.getName();
+		if (!artikel.getUser().getNaam().equals(currentUser)) {
+			return new ModelAndView(FORBIDDEN);
+		}
 		return new ModelAndView(UPLOAD_VIEW).addObject("artikel", artikel);
 	}
 
@@ -46,7 +58,8 @@ public class FileUploadController {
 			ImageValidator imageValidator = new ImageValidator();
 			if (!imageValidator.validate(uploadFile.getOriginalFilename())) {
 				redirectAttributes.addAttribute("artikel", artikel.getId());
-				return UPLOAD_VIEW;
+				redirectAttributes.addAttribute("fout", "Verkeerde type bestand of spaties in bestandsnaam");
+				return UPLOAD_VIEW_AFTER_FAIL;
 			}
 			UploadFile fileUpload = new UploadFile();
 			fileUpload.setFileName(uploadFile.getOriginalFilename());
@@ -56,17 +69,18 @@ public class FileUploadController {
 			redirectAttributes.addAttribute("id", artikel.getId());
 			return SUCCES_VIEW;
 		}
-		return UPLOAD_VIEW;
+		redirectAttributes.addAttribute("artikel", artikel.getId());
+		redirectAttributes.addAttribute("fout", "Bestand te groot");
+		return UPLOAD_VIEW_AFTER_FAIL;
 
 	}
 
-	@RequestMapping(value = "show/{artikelId}")
+	@RequestMapping(value = "show/{id}")
 	@ResponseBody
-	public byte[] helloWorld(@PathVariable long artikelId) {
-		Artikel artikel = artikelService.read(artikelId);
+	public byte[] helloWorld(@PathVariable long id) {
 		try {
-			UploadFile image = fileUploadService.findByArtikel(artikel);
-			return image.getData();
+			UploadFile uploadFile = fileUploadService.read(id);
+			return uploadFile.getData();
 		} catch (NullPointerException ex) {
 			return null;
 		}

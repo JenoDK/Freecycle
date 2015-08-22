@@ -9,6 +9,9 @@
 <link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
 	rel='stylesheet' type='text/css'>
+<link
+	href="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css"
+	rel="stylesheet">
 </head>
 <body>
 	<v:menu />
@@ -29,10 +32,25 @@
 					<dd>${artikel.regio}</dd>
 					<dt>Gebruiker</dt>
 					<dd>${artikel.user.naam}</dd>
-			</dl>
-			<c:url value='/file/show/${artikel.id}'
-			var='url' /> <img class="artikelFoto" src="${url}" alt="" /> 
-			<c:choose>
+			</dl> <c:choose>
+					<c:when test="${not empty artikel.uploadFiles}">
+						<div class="fotorama" data-nav="thumbs" data-allowfullscreen="native"><c:forEach
+								items='${artikel.uploadFiles}' var='uploadFile'>
+								<c:url value='/file/show/${uploadFile.id}' var='url' />
+								<%-- 							<img class="artikelFoto" src="${url}" alt="" /> --%>
+								<%-- 							<c:url value='/images/recycle.png' var='url2' /> --%>
+								<!-- 							<a -->
+								<%-- 								href="${url2}" --%>
+								<!-- 								class="with-caption image-link"> <img class="artikelFoto"  -->
+								<%-- 								src="${url2}"/> --%>
+								<!-- 							</a> -->
+
+								 <a href="${url}"><img src="${url}"></a>
+
+							</c:forEach></div>
+					</c:when>
+					<c:otherwise>Nog geen fotos</c:otherwise>
+				</c:choose> <br /> <c:choose>
 					<c:when test="${not empty artikel.reacties}">
 						<c:forEach items='${artikel.reacties}' var='reactie'>
 							<dl>
@@ -62,7 +80,10 @@
 		</c:otherwise>
 	</c:choose>
 	<div class="login"></div>
-
+	<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script
+	src="http://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
 	<script>
 		document.getElementById('textarea').onkeyup = function() {
 			document.getElementById('count').innerHTML = "Characters left: "
