@@ -41,7 +41,7 @@
 			<div class="tweede deel">
 				<form method='get' action='<c:url value="/artikels/${artikel.id}"/>'>
 					<div class="keep-loginbutton"><input type='submit'
-						value='Doorgaan zonder foto'></div>
+						value='Nee, danku'></div>
 					<div class="clear"></div>
 			</form>
 		</div>
