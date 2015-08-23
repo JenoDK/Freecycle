@@ -1,0 +1,13 @@
+.deel {
+	width: 50%;
+}
+/* .eerste { */
+/* 	float:left; */
+/* } */
+.tweede {
+	float: right;
+	margin-top: -40px;
+}
+.keep-registrerenbutton {
+	margin-top: 20px;
+}

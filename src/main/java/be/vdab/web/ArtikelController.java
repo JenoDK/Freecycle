@@ -83,10 +83,11 @@ public class ArtikelController {
 	}
 
 	@RequestMapping(value = "{artikel}", method = RequestMethod.GET)
-	ModelAndView read(@PathVariable Artikel artikel) {
+	ModelAndView read(@PathVariable Artikel artikel, Principal principal) {
 		ModelAndView modelAndView = new ModelAndView(ARTIKEL_VIEW);
+		String currentUser = principal.getName();
 		if (artikel != null) {
-			modelAndView.addObject(artikel).addObject(new ReactieForm());
+			modelAndView.addObject(artikel).addObject(new ReactieForm()).addObject("currentUser", currentUser);
 		}
 		return modelAndView;
 	}

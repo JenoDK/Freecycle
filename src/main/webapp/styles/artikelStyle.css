@@ -1,0 +1,63 @@
+textarea {
+	font-family: 'Droid Sans', sans-serif;
+	resize: none;
+}
+
+.artikelFoto {
+	width: 100%;
+}
+
+.wrap {
+	width: 70%;
+	margin: 0 auto;
+}
+.reacties {
+	width: 25%;
+	float: right;
+}
+.right {
+	width: 100%;
+	margin: 0;
+}
+
+.artikel {
+	width: 47%;
+}
+
+.userLink {
+	font-weight: bold;
+	color: #54879D;
+}
+
+.reactie {
+	margin-bottom: 25px;
+}
+
+.deleteLink {
+	float: right;
+}
+
+.deleteReactie {
+	width: 15px;
+}
+
+textarea {
+	outline: none;
+	font-size: 15px;
+	font-weight: 600;
+	color: #616161;
+	width: 85%;
+	-webkit-appearance: none;
+}
+
+.usertextarea {
+	-moz-border-top-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	border-image: none;
+	border-radius: 5px;
+	margin-bottom: 1em;
+}
+
+

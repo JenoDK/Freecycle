@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -27,6 +28,7 @@ public class ReactieController {
 	private final ReactieService reactieService;
 	private final ArtikelService artikelService;
 	private static final String REDIRECT_NA_REACTIE = "redirect:/artikels/{id}";
+	private static final String FORBIDDEN = "forbidden";
 
 	@Autowired
 	ReactieController(ArtikelService artikelService, UserService userService, ReactieService reactieService) {
@@ -50,6 +52,22 @@ public class ReactieController {
 		reactie.setArtikel(artikel);
 		reactieService.create(reactie);
 		redirectAttributes.addAttribute("id", artikel.getId());
+		return REDIRECT_NA_REACTIE;
+	}
+	
+	@RequestMapping(value = "{reactie}/verwijderen", method = RequestMethod.POST)
+	String delete(@PathVariable Reactie reactie,
+			RedirectAttributes redirectAttributes, Principal principal) {
+		if (reactie == null) {
+			return FORBIDDEN;
+		}
+		String currentUser = principal.getName();
+		if (!reactie.getUser().getNaam().equals(currentUser)) {
+			return FORBIDDEN;
+		}
+		long id = reactie.getId();
+		reactieService.delete(id);
+		redirectAttributes.addAttribute("id", reactie.getArtikel().getId());
 		return REDIRECT_NA_REACTIE;
 	}
 
