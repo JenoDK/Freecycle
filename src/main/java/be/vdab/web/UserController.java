@@ -45,6 +45,7 @@ public class UserController {
 	private static final String GEGEVENS_VIEW = "user/gegevens";
 	private static final String FORGOT_PASSWORD = "user/forgotPassword";
 	private static final String FORGOT_PASSWORD_SUCCES = "user/forgotPasswordSucces";
+	private static final String FORBIDDEN = "forbidden";
 
 	@Autowired
 	UserController(UserService userService, RolService rolService,
@@ -116,9 +117,13 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "{user}/wijzigen", method = RequestMethod.GET)
-	ModelAndView updateForm(@PathVariable User user) {
+	ModelAndView updateForm(@PathVariable User user, Principal principal) {
 		if (user == null) {
 			return new ModelAndView(REDIRECT_URL_USER_NIET_GEVONDEN);
+		}
+		String currentUser = principal.getName();
+		if (!user.getNaam().equals(currentUser)) {
+			return new ModelAndView(FORBIDDEN);
 		}
 		user.setMatchingPaswoord(user.getPaswoord());
 		return new ModelAndView(WIJZIGEN_VIEW).addObject(user);
