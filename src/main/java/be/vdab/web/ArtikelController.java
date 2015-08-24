@@ -4,8 +4,12 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import net.tanesha.recaptcha.ReCaptchaImpl;
+import net.tanesha.recaptcha.ReCaptchaResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -24,15 +28,19 @@ import be.vdab.entities.Artikel;
 import be.vdab.entities.User;
 import be.vdab.enums.Ouderdom;
 import be.vdab.enums.Soort;
+import be.vdab.mail.MailSender;
 import be.vdab.services.ArtikelService;
 import be.vdab.services.UserService;
+import be.vdab.valueobjects.ContactBericht;
 import be.vdab.valueobjects.Regio;
+import be.vdab.valueobjects.RegioSoortOuderdom;
 
 @Controller
 @RequestMapping(value = "/artikels", produces = MediaType.TEXT_HTML_VALUE)
 public class ArtikelController {
 	private final ArtikelService artikelService;
 	private final UserService userService;
+	private final MailSender mailSender;
 	private static final String ARTIKELS_VIEW = "artikels/artikels";
 	private static final String TOEVOEGEN_VIEW = "artikels/toevoegen";
 	private static final String REDIRECT_URL_NA_TOEVOEGEN = "redirect:/file/upload/{artikel}";
@@ -41,14 +49,19 @@ public class ArtikelController {
 	private static final String REDIRECT_URL_NA_VERWIJDEREN = "redirect:/artikels/{id}/verwijderd";
 	private static final String VERWIJDERD_VIEW = "artikels/verwijderd";
 	private static final String PER_REGIO_VIEW = "artikels/perregio";
+	private static final String ZOEKEN_VIEW = "artikels/zoeken";
 	private static final String WIJZIGEN_VIEW = "artikels/wijzigen";
 	private static final String REDIRECT_URL_NA_WIJZIGEN = "redirect:/user/mijnArtikels";
+	private static final String CONTACTEER_VIEW = "artikels/contacteer";
+	private static final String REDIRECT_NA_CONTACTEER = "artikels/contacteerSucces";
 	private static final String FORBIDDEN = "forbidden";
 
 	@Autowired
-	ArtikelController(ArtikelService artikelService, UserService userService) {
+	ArtikelController(ArtikelService artikelService, UserService userService,
+			MailSender mailSender) {
 		this.artikelService = artikelService;
 		this.userService = userService;
+		this.mailSender = mailSender;
 	}
 
 	// if you register artikel it binds it to the logged in user.
@@ -87,7 +100,8 @@ public class ArtikelController {
 		ModelAndView modelAndView = new ModelAndView(ARTIKEL_VIEW);
 		String currentUser = principal.getName();
 		if (artikel != null) {
-			modelAndView.addObject(artikel).addObject(new ReactieForm()).addObject("currentUser", currentUser);
+			modelAndView.addObject(artikel).addObject(new ReactieForm())
+					.addObject("currentUser", currentUser);
 		}
 		return modelAndView;
 	}
@@ -129,14 +143,59 @@ public class ArtikelController {
 	ModelAndView findByRegio(@ModelAttribute Regio regio,
 			BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView(PER_REGIO_VIEW);
+		RegioSoortOuderdom regioSoortOuderdom = new RegioSoortOuderdom();
+		regioSoortOuderdom.setRegio(regio.getRegio());
 		if (!bindingResult.hasErrors()) {
-			List<Artikel> artikels = artikelService.findByRegioLike(regio);
+			List<Artikel> artikels = artikelService
+					.findByRegioLike(regioSoortOuderdom);
 			if (artikels.isEmpty()) {
 				bindingResult.reject("geenArtikels");
 			} else {
 				modelAndView.addObject("artikels", artikels);
 			}
 		}
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "zoeken", method = RequestMethod.GET)
+	ModelAndView findByZoeken() {
+		return new ModelAndView(ZOEKEN_VIEW, "regioSoortOuderdom",
+				new RegioSoortOuderdom()).addObject("soorten",
+				Arrays.asList(Soort.values())).addObject("ouderdom",
+				Arrays.asList(Ouderdom.values()));
+	}
+
+	@InitBinder("regioSoortOuderdom")
+	void initBinderRegioSoortOuderdom(DataBinder dataBinder) {
+		dataBinder.setRequiredFields("regioSoortOuderdom");
+	}
+
+	@RequestMapping(value = "artikelsZoeken", method = RequestMethod.GET, params = {
+			"regio", "soort" })
+	ModelAndView findByZoeken(
+			@ModelAttribute RegioSoortOuderdom regioSoortOuderdom,
+			BindingResult bindingResult) {
+		ModelAndView modelAndView = new ModelAndView(ZOEKEN_VIEW);
+		modelAndView.addObject("soorten", Arrays.asList(Soort.values()))
+				.addObject("ouderdom", Arrays.asList(Ouderdom.values()));
+		if (regioSoortOuderdom.getRegio().isEmpty()) {
+			List<Artikel> artikels = artikelService
+					.findBySoortLike(regioSoortOuderdom);
+			if (artikels.isEmpty()) {
+				bindingResult.reject("geenArtikels");
+			} else {
+				modelAndView.addObject("artikels", artikels);
+			}
+		} else {
+			List<Artikel> artikels = artikelService
+					.findByRegioLikeAndSoortLike(regioSoortOuderdom);
+			if (artikels.isEmpty()) {
+				bindingResult.reject("geenArtikels");
+			} else {
+				modelAndView.addObject("artikels", artikels);
+			}
+		}
+
 		return modelAndView;
 	}
 
@@ -164,7 +223,46 @@ public class ArtikelController {
 		artikelService.update(artikel);
 		return REDIRECT_URL_NA_WIJZIGEN;
 	}
-	
-	
+
+	@RequestMapping(value = "contacteer/{artikel}", method = RequestMethod.GET)
+	ModelAndView contacteerForm(@PathVariable Artikel artikel) {
+		ModelAndView modelAndView = new ModelAndView(CONTACTEER_VIEW);
+		if (artikel != null) {
+			ContactBericht contactBericht = new ContactBericht();
+			contactBericht.setArtikel(artikel);
+			modelAndView.addObject(contactBericht);
+		}
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "contacteer", method = RequestMethod.POST)
+	public String create(@Valid ContactBericht contactBericht,
+			BindingResult bindingResult, HttpServletRequest request) {
+		if (bindingResult.hasErrors()) {
+			return CONTACTEER_VIEW;
+		}
+		String remoteAddr = request.getRemoteAddr();
+		ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
+		reCaptcha.setPrivateKey("6Lf7XgsTAAAAADJQ940XN0Hwc6Qglw2pt2FUKhE1");
+
+		String challenge = request.getParameter("recaptcha_challenge_field");
+		String uresponse = request.getParameter("recaptcha_response_field");
+		ReCaptchaResponse reCaptchaResponse = reCaptcha.checkAnswer(remoteAddr,
+				challenge, uresponse);
+
+		if (!reCaptchaResponse.isValid()) {
+			bindingResult.reject("recaptchaFout");
+			return CONTACTEER_VIEW;
+		}
+		Artikel artikel = artikelService.read(contactBericht.getArtikel()
+				.getId());
+		contactBericht.setArtikel(artikel);
+		try {
+			mailSender.contacteerGebruikerEmail(contactBericht);
+		} catch (MessagingException e) {
+			return CONTACTEER_VIEW;
+		}
+		return REDIRECT_NA_CONTACTEER;
+	}
 
 }

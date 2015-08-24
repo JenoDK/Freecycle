@@ -4,7 +4,7 @@ import java.util.List;
 
 import be.vdab.entities.Artikel;
 import be.vdab.entities.User;
-import be.vdab.valueobjects.Regio;
+import be.vdab.valueobjects.RegioSoortOuderdom;
 
 
 public interface ArtikelService {
@@ -18,7 +18,11 @@ public interface ArtikelService {
 
 	List<Artikel> findAll();
 	
-	List<Artikel> findByRegioLike(Regio regio);
+	List<Artikel> findByRegioLike(RegioSoortOuderdom regioSoortOuderdom);
+	
+	List<Artikel> findBySoortLike(RegioSoortOuderdom regioSoortOuderdom);
+	
+	List<Artikel> findByRegioLikeAndSoortLike(RegioSoortOuderdom regioSoortOuderdom);
 	
 	List<Artikel> findByUser(User user);
 	

@@ -38,6 +38,7 @@ public class UserController {
 	private static final String TOEVOEGEN_VIEW = "user/toevoegen";
 	private static final String REDIRECT_URL_NA_TOEVOEGEN = "user/succes";
 	private static final String ARTIKELS_VIEW = "user/artikels";
+	private static final String USER_ARTIKELS_VIEW = "user/userArtikels";
 	private static final String REDIRECT_URL_USER_NIET_GEVONDEN = "redirect:/";
 	private static final String WIJZIGEN_VIEW = "user/wijzigen";
 	private static final String REDIRECT_URL_NA_WIJZIGEN = "user/wijzigenSucces";
@@ -103,6 +104,15 @@ public class UserController {
 		User user = userService.findByNaamLike(currentUser);
 		return new ModelAndView(ARTIKELS_VIEW, "artikels",
 				artikelService.findByUser(user));
+	}
+	
+	@RequestMapping(value = "{user}", method = RequestMethod.GET)
+	ModelAndView findArtikelsFromUser(@PathVariable User user) {
+		if (user == null) {
+			return new ModelAndView(REDIRECT_URL_USER_NIET_GEVONDEN);
+		}
+		return new ModelAndView(USER_ARTIKELS_VIEW, "artikels",
+				artikelService.findByUser(user)).addObject("user", user.getNaam());
 	}
 
 	@RequestMapping(value = "{user}/wijzigen", method = RequestMethod.GET)

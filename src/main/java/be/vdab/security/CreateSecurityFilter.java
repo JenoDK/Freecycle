@@ -57,7 +57,7 @@ public class CreateSecurityFilter extends WebSecurityConfigurerAdapter {
 				.antMatchers("/artikels/toevoegen", "/artikels/*/wijzigen",
 						"/artikels/*/verwijderen", "/artikels/regio",
 						"/file/uploadFile", "/file/upload",
-						"/file/uploadFile", "/file/show/*", "/file/upload/*")
+						"/file/uploadFile", "/file/show/*", "/file/upload/*", "/artikels/contacteer/*")
 				.hasAnyAuthority(USER, ADMIN)
 				.antMatchers(HttpMethod.POST, "/artikels")
 				.hasAnyAuthority(USER, ADMIN)

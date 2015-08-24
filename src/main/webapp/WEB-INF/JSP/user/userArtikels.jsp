@@ -18,7 +18,7 @@
 	<v:menu />
 	<div class="login">
 		<div class="login-top">
-			<h2>Mijn artikels</h2>
+			<h2>Artikels van ${user}</h2>
 	</div> <c:forEach items='${artikels}' var='artikel'>
 			<div class="login artikelsInside">
 				<div class="login-top">
@@ -44,30 +44,7 @@
 									value='/images/nopicture.jpg' var='url' /><a href="${url}"><img
 									src="${url}"></a></div>
 						</c:otherwise>
-					</c:choose>
-					<div class='keepme'><div class="keep-loginbutton2"><spring:url
-								value='/artikels/{id}/verwijderen' var='verwijderURL'>
-								<spring:param name='id' value='${artikel.id}' />
-							</spring:url> <form:form action='${verwijderURL}' method='post'>
-								<input type='submit' value='Verwijderen'>
-							</form:form></div>
-						<div class="keep-loginbutton2"><spring:url
-								value='/artikels/{id}/wijzigen' var='wijzigURL'>
-								<spring:param name='id' value='${artikel.id}' />
-							</spring:url>
-							<form action='${wijzigURL}'><input type='submit'
-								value='Wijzigen'></form></div>
-						<div class="keep-loginbutton2"><spring:url
-								value='/file/upload/{id}' var='uploadURL'>
-								<spring:param name='id' value='${artikel.id}' />
-							</spring:url>
-							<form action='${uploadURL}'><input type='submit'
-								value='Foto uploaden'></form></div>
-
-
-
-
-						<div class="clear"></div></div></div>
+					</c:choose></div>
 			</div>
 
 		</c:forEach>

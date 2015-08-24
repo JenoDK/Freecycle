@@ -61,13 +61,16 @@ public class Artikel implements Serializable {
 	@Length(min = 1, max = 50)
 	@SafeHtml
 	private String regio;
+	@Length(min = 0, max = 255)
+	@SafeHtml
+	private String beschrijving;
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "userid")
 	private User user;
-	@OneToMany(mappedBy = "artikel", cascade=CascadeType.REMOVE)
+	@OneToMany(mappedBy = "artikel", cascade = CascadeType.REMOVE)
 	@OrderBy("id")
 	private Set<Reactie> reacties;
-	@OneToMany(mappedBy = "artikel", cascade=CascadeType.REMOVE)
+	@OneToMany(mappedBy = "artikel", cascade = CascadeType.REMOVE)
 	@OrderBy("id")
 	private Set<UploadFile> uploadFiles;
 
@@ -102,7 +105,7 @@ public class Artikel implements Serializable {
 			reactie.setArtikel(null);
 		}
 	}
-	
+
 	public Set<UploadFile> getUploadFiles() {
 		return Collections.unmodifiableSet(uploadFiles);
 	}
@@ -167,6 +170,14 @@ public class Artikel implements Serializable {
 
 	public void setRegio(String regio) {
 		this.regio = regio;
+	}
+
+	public String getBeschrijving() {
+		return beschrijving;
+	}
+
+	public void setBeschrijving(String beschrijving) {
+		this.beschrijving = beschrijving;
 	}
 
 	public User getUser() {

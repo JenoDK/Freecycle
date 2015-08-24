@@ -1,8 +1,8 @@
 <%@page contentType='text/html' pageEncoding='UTF-8' session='false'%>
 <%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core'%>
-<%@taglib prefix='v' uri='http://vdab.be/tags'%>
 <%@taglib prefix='spring' uri='http://www.springframework.org/tags'%>
 <%@taglib prefix='form' uri='http://www.springframework.org/tags/form'%>
+<%@taglib prefix='v' uri='http://vdab.be/tags'%>
 <!doctype html>
 <html lang='nl'>
 <head>
@@ -18,8 +18,27 @@
 	<v:menu />
 	<div class="login">
 		<div class="login-top">
-			<h2>Mijn artikels</h2>
-	</div> <c:forEach items='${artikels}' var='artikel'>
+			<h2>Artikels per soort en/of regio</h2>
+	</div>
+		<div class="login-bottom"><c:url
+				value='/artikels/artikelsZoeken' var='url' /> <form:form
+				action="${url}" commandName='regioSoortOuderdom' method='get'>
+				<div class="user"><form:input path='regio' name='regio'
+						type='text' placeholder="Regio (kan leeg zijn om alleen op soort te zoeken)" maxlength='50'
+						autofocus='autofocus' /></div>
+				<label> <form:select path="soort" name='soort'>
+						<form:options items="${soorten}" itemLabel="id" />
+					</form:select>
+				</label>
+				<form:errors cssClass='fout' />
+				<div class='keepme'>
+					<div class="keep-loginbutton"><input type='submit'
+						value='Zoeken' id='toevoegknop'></div>
+					<div class="clear"></div>
+				</div>
+				<p>${fout}</p>
+
+			</form:form></div> <c:forEach items='${artikels}' var='artikel'>
 			<div class="login artikelsInside">
 				<div class="login-top">
 					<h2><spring:url var='url' value='/artikels/{id}'>
@@ -44,34 +63,9 @@
 									value='/images/nopicture.jpg' var='url' /><a href="${url}"><img
 									src="${url}"></a></div>
 						</c:otherwise>
-					</c:choose>
-					<div class='keepme'><div class="keep-loginbutton2"><spring:url
-								value='/artikels/{id}/verwijderen' var='verwijderURL'>
-								<spring:param name='id' value='${artikel.id}' />
-							</spring:url> <form:form action='${verwijderURL}' method='post'>
-								<input type='submit' value='Verwijderen'>
-							</form:form></div>
-						<div class="keep-loginbutton2"><spring:url
-								value='/artikels/{id}/wijzigen' var='wijzigURL'>
-								<spring:param name='id' value='${artikel.id}' />
-							</spring:url>
-							<form action='${wijzigURL}'><input type='submit'
-								value='Wijzigen'></form></div>
-						<div class="keep-loginbutton2"><spring:url
-								value='/file/upload/{id}' var='uploadURL'>
-								<spring:param name='id' value='${artikel.id}' />
-							</spring:url>
-							<form action='${uploadURL}'><input type='submit'
-								value='Foto uploaden'></form></div>
-
-
-
-
-						<div class="clear"></div></div></div>
+					</c:choose></div>
 			</div>
-
 		</c:forEach>
-
 </div>
 	<script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

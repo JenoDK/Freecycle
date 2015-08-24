@@ -26,9 +26,10 @@
 				<div class="login-bottom"><spring:url var='url'
 						value='/reactie' /> <form:form action='${url}' method='post'
 						commandName='reactieForm'>
-						<div class="usertextarea"><form:textarea id="textarea" rows="5" cols="30"
-							path='reactie.reactie' placeholder="Reactie(max 255 tekens)" autofocus='autofocus' required='required'
-							maxlength="255" /></div>
+						<div class="usertextarea"><form:textarea id="textarea"
+								rows="5" cols="30" path='reactie.reactie'
+								placeholder="Reactie(max 255 tekens)" autofocus='autofocus'
+								required='required' maxlength="255" /></div>
 						<p id="count"></p>
 						<form:errors cssClass='fout' />
 						<form:input path='artikel.id' type="hidden" value="${artikel.id}" />
@@ -73,18 +74,39 @@
 					<div class="login-top">
 						<h2>${artikel.naam}</h2>
 				</div>
-					<dl>
-						<dt>Soort</dt>
-						<dd>${artikel.soort.id}</dd>
-						<dt>Geschatte waarde</dt>
-						<dd>&euro; ${artikel.geschatteWaarde}</dd>
-						<dt>Ouderdom</dt>
-						<dd>${artikel.ouderdom.id}</dd>
-						<dt>Regio</dt>
-						<dd>${artikel.regio}</dd>
-						<dt>Gebruiker</dt>
-						<dd>${artikel.user.naam}</dd>
-				</dl> <br />
+					<div class="login-bottom">
+						<p class="artikelField gebruiker"><span
+							class="artikelFieldBeschrijving">Gebruiker: </span> <spring:url
+								var='url' value='/user/{id}'>
+								<spring:param name='id' value='${artikel.user.id}' />
+							</spring:url> <a class="userLink" href='${url}'>${artikel.user.naam}</a></p> <spring:url
+							value='/artikels/contacteer/{id}' var='contacteerURL'>
+							<spring:param name='id' value='${artikel.id}' />
+						</spring:url>
+						<form class="contacteerForm" action='${contacteerURL}' method='get'>
+							<div class='keepme'>
+								<div class="keep-registrerenbutton"><input type='submit'
+									value='Contacteer deze gebruiker' id='toevoegknop'></div>
+								<div class="clear"></div>
+						</div>
+					</form>
+
+
+						<p class="artikelField"><span class="artikelFieldBeschrijving">Soort:
+						</span>${artikel.soort.id}</p>
+						<p class="artikelField"><span class="artikelFieldBeschrijving">Geschatte
+								waarde: </span>&euro; ${artikel.geschatteWaarde}</p>
+						<p class="artikelField"><span class="artikelFieldBeschrijving">Ouderdom:
+						</span>${artikel.ouderdom.id}</p>
+						<p class="artikelField"><span class="artikelFieldBeschrijving">Regio:
+						</span>${artikel.regio}</p>
+						<p class="artikelField"><span class="artikelFieldBeschrijving">Beschrijving:
+						</span></p>
+						<p><c:choose>
+								<c:when test="${not empty artikel.beschrijving}">${artikel.beschrijving}</c:when>
+								<c:otherwise>Geen beschrijving</c:otherwise>
+							</c:choose></p>
+				</div>
 					<div class="login-top">
 						<h2>Foto's</h2>
 				</div> <c:choose>
@@ -100,8 +122,9 @@
 						<c:otherwise>
 							<div class="fotorama" data-nav="thumbs"
 								data-allowfullscreen="native" data-width="100%"
-								data-ratio="800/600" data-enableifsingleframe="true"><c:url value='/images/nopicture.jpg'
-									var='url' /><a href="${url}"><img src="${url}"></a></div>
+								data-ratio="800/600" data-enableifsingleframe="true"><c:url
+									value='/images/nopicture.jpg' var='url' /><a href="${url}"><img
+									src="${url}"></a></div>
 						</c:otherwise>
 					</c:choose>
 				</div>

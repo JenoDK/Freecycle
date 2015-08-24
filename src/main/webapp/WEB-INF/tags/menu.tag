@@ -12,6 +12,7 @@
 				<li><a href="<c:url value='/artikels'/>">Lijst</a></li>
 				<li><a href="<c:url value='/artikels/toevoegen'/>">Toevoegen</a></li>
 				<li><a href="<c:url value='/artikels/regio'/>">Per regio</a></li>
+				<li><a href="<c:url value='/artikels/zoeken'/>">Zoeken</a></li>
 			</ul></li>
 		<security:authorize access='isAnonymous()'>
 			<li class="rightMenu"><a href="<c:url value='/login'/>">Inloggen<img id="aanmeldenlogo" src="<c:url value="/images/user2.png" />"/></a></li>

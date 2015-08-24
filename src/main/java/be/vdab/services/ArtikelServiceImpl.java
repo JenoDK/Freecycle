@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 import be.vdab.dao.ArtikelDAO;
 import be.vdab.entities.Artikel;
 import be.vdab.entities.User;
-import be.vdab.valueobjects.Regio;
+import be.vdab.valueobjects.RegioSoortOuderdom;
 
 @ReadOnlyTransactionalService
 public class ArtikelServiceImpl implements ArtikelService {
@@ -18,7 +18,7 @@ public class ArtikelServiceImpl implements ArtikelService {
 	ArtikelServiceImpl(ArtikelDAO artikelDAO) {
 		this.artikelDAO = artikelDAO;
 	}
-	
+
 	@Override
 	@ModifyingTransactionalServiceMethod
 	public void create(Artikel artikel) {
@@ -49,12 +49,23 @@ public class ArtikelServiceImpl implements ArtikelService {
 	public List<Artikel> findAll() {
 		return artikelDAO.findAll(new Sort("regio"));
 	}
-	
+
 	@Override
-	public List<Artikel> findByRegioLike(Regio regio){
-		return artikelDAO.findByRegioLike(regio.getRegio());
+	public List<Artikel> findByRegioLike(RegioSoortOuderdom regioSoortOuderdom) {
+		return artikelDAO.findByRegioLike(regioSoortOuderdom.getRegio());
 	}
-	
+
+	@Override
+	public List<Artikel> findBySoortLike(RegioSoortOuderdom regioSoortOuderdom) {
+		return artikelDAO.findBySoortLike(regioSoortOuderdom.getSoort());
+	}
+
+	@Override
+	public List<Artikel> findByRegioLikeAndSoortLike(
+			RegioSoortOuderdom regioSoortOuderdom) {
+		return artikelDAO.findByRegioLikeAndSoortLike(regioSoortOuderdom.getRegio(), regioSoortOuderdom.getSoort());
+	}
+
 	@Override
 	public long findAantalArtikels() {
 		return artikelDAO.count();
@@ -64,7 +75,5 @@ public class ArtikelServiceImpl implements ArtikelService {
 	public List<Artikel> findByUser(User user) {
 		return artikelDAO.findByUser(user);
 	}
-	
-	
 
 }

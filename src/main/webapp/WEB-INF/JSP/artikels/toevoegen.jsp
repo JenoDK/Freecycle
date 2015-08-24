@@ -2,11 +2,13 @@
 <%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core'%>
 <%@taglib prefix='v' uri='http://vdab.be/tags'%>
 <%@taglib prefix='form' uri='http://www.springframework.org/tags/form'%>
+<%@taglib prefix='spring' uri='http://www.springframework.org/tags'%>
 <!doctype html>
 <html lang='nl'>
 <head>
 <link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
-<link rel='stylesheet' href='<c:url value="/styles/artikelToevoegenStyle.css"/>'>
+<link rel='stylesheet'
+	href='<c:url value="/styles/artikelToevoegenStyle.css"/>'>
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
 	rel='stylesheet' type='text/css'>
 </head>
@@ -43,6 +45,13 @@
 
 				<div class="fout"><form:errors path='regio' cssClass="fout"
 						delimiter=', ' /></div>
+
+				<div class="usertextarea"><form:textarea id="textarea"
+						rows="5" cols="30" path='beschrijving' name="beschrijving"
+						placeholder="Beschrijving(max 255 tekens)" maxlength="255" /></div>
+				<p id="count"></p>
+
+
 				<label> <form:select path="soort">
 						<form:options items="${soorten}" itemLabel="id" />
 					</form:select>
@@ -63,6 +72,12 @@
 	<script>
 		document.getElementById('toevoegform').onsubmit = function() {
 			document.getElementById('toevoegknop').disabled = true;
+		};
+	</script>
+	<script>
+		document.getElementById('textarea').onkeyup = function() {
+			document.getElementById('count').innerHTML = "Characters left: "
+					+ (255 - this.value.length);
 		};
 	</script>
 </body>
