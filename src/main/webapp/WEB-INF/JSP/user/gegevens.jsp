@@ -6,7 +6,7 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<v:head title='Gegevens ${user.naam}' />
 <link rel='stylesheet' href='<c:url value="/styles/artikelStyle.css"/>'>
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
 	rel='stylesheet' type='text/css'>
@@ -22,12 +22,13 @@
 			</span>${user.email}</p>
 			<p class="artikelField"><span class="artikelFieldBeschrijving">Aantal
 					artikels: </span>${user.artikelscount}</p>
-			<div class='keepme'><div class="keep-loginbutton2"><spring:url
-						value='/user/{id}/verwijderen' var='verwijderURL'>
-						<spring:param name='id' value='${user.id}' />
-					</spring:url> <form:form action='${verwijderURL}' method='post'>
-						<input type='submit' value='Verwijderen'>
-					</form:form></div>
+			<div class='keepme'>
+<%-- 			<div class="keep-loginbutton2"><spring:url --%>
+<%-- 						value='/user/{id}/verwijderen' var='verwijderURL'> --%>
+<%-- 						<spring:param name='id' value='${user.id}' /> --%>
+<%-- 					</spring:url> <form:form action='${verwijderURL}' method='post'> --%>
+<!-- 						<input type='submit' value='Verwijderen'> -->
+<%-- 					</form:form></div> --%>
 				<div class="keep-loginbutton2"><spring:url
 						value='/user/{id}/wijzigen' var='wijzigURL'>
 						<spring:param name='id' value='${user.id}' />

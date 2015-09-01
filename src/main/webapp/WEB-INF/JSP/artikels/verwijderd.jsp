@@ -4,7 +4,7 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<v:head title='${naam} verwijdered' />
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
 	rel='stylesheet' type='text/css'>
 </head>

@@ -6,7 +6,7 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<v:head title='${artikel.naam} wijzigen' />
 <link rel='stylesheet'
 	href='<c:url value="/styles/artikelToevoegenStyle.css"/>'>
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'

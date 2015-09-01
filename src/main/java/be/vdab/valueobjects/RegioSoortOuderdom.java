@@ -27,24 +27,12 @@ public class RegioSoortOuderdom {
 		return regio;
 	}
 
-	public void setRegio(String regio) {
-		this.regio = regio;
-	}
-
 	public Soort getSoort() {
 		return soort;
 	}
 
-	public void setSoort(Soort soort) {
-		this.soort = soort;
-	}
-
 	public Ouderdom getOuderdom() {
 		return ouderdom;
-	}
-
-	public void setOuderdom(Ouderdom ouderdom) {
-		this.ouderdom = ouderdom;
 	}
 
 }

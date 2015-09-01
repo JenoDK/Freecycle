@@ -16,9 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.DataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +32,6 @@ import be.vdab.mail.MailSender;
 import be.vdab.services.ArtikelService;
 import be.vdab.services.UserService;
 import be.vdab.valueobjects.ContactBericht;
-import be.vdab.valueobjects.Regio;
 import be.vdab.valueobjects.RegioSoortOuderdom;
 
 @Controller
@@ -49,7 +47,6 @@ public class ArtikelController {
 	private static final String REDIRECT_URL_ARTIKEL_NIET_GEVONDEN = "redirect:/artikels";
 	private static final String REDIRECT_URL_NA_VERWIJDEREN = "redirect:/artikels/{id}/verwijderd";
 	private static final String VERWIJDERD_VIEW = "artikels/verwijderd";
-	private static final String PER_REGIO_VIEW = "artikels/perregio";
 	private static final String ZOEKEN_VIEW = "artikels/zoeken";
 	private static final String WIJZIGEN_VIEW = "artikels/wijzigen";
 	private static final String REDIRECT_URL_NA_WIJZIGEN = "redirect:/user/mijnArtikels";
@@ -134,34 +131,6 @@ public class ArtikelController {
 		return new ModelAndView(VERWIJDERD_VIEW, "naam", naam);
 	}
 
-	@RequestMapping(value = "regio", method = RequestMethod.GET)
-	ModelAndView findByRegio() {
-		Regio regio = new Regio();
-		return new ModelAndView(PER_REGIO_VIEW).addObject(regio);
-	}
-
-	@InitBinder("regio")
-	void initBinderRegio(DataBinder dataBinder) {
-		dataBinder.setRequiredFields("regio");
-	}
-
-	@RequestMapping(method = RequestMethod.GET, params = { "regio" })
-	ModelAndView findByRegio(@ModelAttribute Regio regio,
-			BindingResult bindingResult) {
-		ModelAndView modelAndView = new ModelAndView(PER_REGIO_VIEW);
-		RegioSoortOuderdom regioSoortOuderdom = new RegioSoortOuderdom();
-		regioSoortOuderdom.setRegio(regio.getRegio());
-		if (!bindingResult.hasErrors()) {
-			List<Artikel> artikels = artikelService.zoeken(regioSoortOuderdom);
-			if (artikels.isEmpty()) {
-				bindingResult.reject("geenArtikels");
-			} else {
-				modelAndView.addObject("artikels", artikels);
-			}
-		}
-		return modelAndView;
-	}
-
 	@RequestMapping(value = "zoeken", method = RequestMethod.GET)
 	ModelAndView findByZoeken() {
 		return new ModelAndView(ZOEKEN_VIEW, "regioSoortOuderdom",
@@ -171,8 +140,9 @@ public class ArtikelController {
 	}
 
 	@InitBinder("regioSoortOuderdom")
-	void initBinderRegioSoortOuderdom(DataBinder dataBinder) {
+	void initBinderRegioSoortOuderdom(WebDataBinder dataBinder) {
 		dataBinder.setRequiredFields("regioSoortOuderdom");
+		dataBinder.initDirectFieldAccess();
 	}
 
 	@RequestMapping(value = "artikelsZoeken", method = RequestMethod.GET)
@@ -231,6 +201,11 @@ public class ArtikelController {
 			modelAndView.addObject(contactBericht);
 		}
 		return modelAndView;
+	}
+	
+	@InitBinder("contactBericht")
+	void initBinderContactBericht(WebDataBinder binder) {
+		binder.initDirectFieldAccess();
 	}
 
 	@RequestMapping(value = "contacteer", method = RequestMethod.POST)
