@@ -8,6 +8,8 @@ import org.springframework.data.domain.Sort;
 import be.vdab.dao.ArtikelDAO;
 import be.vdab.entities.Artikel;
 import be.vdab.entities.User;
+import be.vdab.enums.Ouderdom;
+import be.vdab.enums.Soort;
 import be.vdab.valueobjects.RegioSoortOuderdom;
 
 @ReadOnlyTransactionalService
@@ -51,19 +53,42 @@ public class ArtikelServiceImpl implements ArtikelService {
 	}
 
 	@Override
-	public List<Artikel> findByRegioLike(RegioSoortOuderdom regioSoortOuderdom) {
-		return artikelDAO.findByRegioLike(regioSoortOuderdom.getRegio());
-	}
-
-	@Override
-	public List<Artikel> findBySoortLike(RegioSoortOuderdom regioSoortOuderdom) {
-		return artikelDAO.findBySoortLike(regioSoortOuderdom.getSoort());
-	}
-
-	@Override
-	public List<Artikel> findByRegioLikeAndSoortLike(
-			RegioSoortOuderdom regioSoortOuderdom) {
-		return artikelDAO.findByRegioLikeAndSoortLike(regioSoortOuderdom.getRegio(), regioSoortOuderdom.getSoort());
+	public List<Artikel> zoeken(RegioSoortOuderdom regioSoortOuderdom) {
+		if (regioSoortOuderdom.getRegio().isEmpty()) {
+			if (regioSoortOuderdom.getSoort().equals(Soort.SOORTEN)) {
+				if (regioSoortOuderdom.getOuderdom().equals(Ouderdom.OUDERDOM)){
+					return artikelDAO.findAll();
+				}
+				return artikelDAO.findByOuderdomLike(regioSoortOuderdom
+						.getOuderdom());
+			} else if (regioSoortOuderdom.getOuderdom().equals(
+					Ouderdom.OUDERDOM)) {
+				return artikelDAO
+						.findBySoortLike(regioSoortOuderdom.getSoort());
+			} else {
+				return artikelDAO.findBySoortLikeAndOuderdomLike(
+						regioSoortOuderdom.getSoort(),
+						regioSoortOuderdom.getOuderdom());
+			}
+		}
+		if (regioSoortOuderdom.getSoort().equals(Soort.SOORTEN)) {
+			if (regioSoortOuderdom.getOuderdom().equals(Ouderdom.OUDERDOM)) {
+				return artikelDAO
+						.findByRegioLike(regioSoortOuderdom.getRegio());
+			} else {
+				return artikelDAO.findByRegioLikeAndOuderdomLike(
+						regioSoortOuderdom.getRegio(),
+						regioSoortOuderdom.getOuderdom());
+			}
+		}
+		if (regioSoortOuderdom.getOuderdom().equals(Ouderdom.OUDERDOM)) {
+			return artikelDAO.findByRegioLikeAndSoortLike(
+					regioSoortOuderdom.getRegio(),
+					regioSoortOuderdom.getSoort());
+		}
+		return artikelDAO.findByRegioLikeAndSoortLikeAndOuderdomLike(
+				regioSoortOuderdom.getRegio(), regioSoortOuderdom.getSoort(),
+				regioSoortOuderdom.getOuderdom());
 	}
 
 	@Override

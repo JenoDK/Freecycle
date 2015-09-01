@@ -50,6 +50,8 @@
 						rows="5" cols="30" path='beschrijving' name="beschrijving"
 						placeholder="Beschrijving(max 255 tekens)" maxlength="255" /></div>
 				<p id="count"></p>
+					<div class="fout"><form:errors path='beschrijving' cssClass="fout"
+						delimiter=', ' /></div>
 
 
 				<label> <form:select path="soort">

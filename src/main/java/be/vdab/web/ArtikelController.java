@@ -1,6 +1,7 @@
 package be.vdab.web;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -83,9 +84,14 @@ public class ArtikelController {
 
 	@RequestMapping(value = "toevoegen", method = RequestMethod.GET)
 	ModelAndView createForm() {
+		List<Soort> soorten = new ArrayList<Soort>(
+				Arrays.asList(Soort.values()));
+		soorten.remove(0);
+		List<Ouderdom> ouderdom = new ArrayList<Ouderdom>(
+				Arrays.asList(Ouderdom.values()));
+		ouderdom.remove(0);
 		return new ModelAndView(TOEVOEGEN_VIEW, "artikel", new Artikel())
-				.addObject("soorten", Arrays.asList(Soort.values())).addObject(
-						"ouderdom", Arrays.asList(Ouderdom.values()));
+				.addObject("soorten", soorten).addObject("ouderdom", ouderdom);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -146,8 +152,7 @@ public class ArtikelController {
 		RegioSoortOuderdom regioSoortOuderdom = new RegioSoortOuderdom();
 		regioSoortOuderdom.setRegio(regio.getRegio());
 		if (!bindingResult.hasErrors()) {
-			List<Artikel> artikels = artikelService
-					.findByRegioLike(regioSoortOuderdom);
+			List<Artikel> artikels = artikelService.zoeken(regioSoortOuderdom);
 			if (artikels.isEmpty()) {
 				bindingResult.reject("geenArtikels");
 			} else {
@@ -170,32 +175,18 @@ public class ArtikelController {
 		dataBinder.setRequiredFields("regioSoortOuderdom");
 	}
 
-	@RequestMapping(value = "artikelsZoeken", method = RequestMethod.GET, params = {
-			"regio", "soort" })
-	ModelAndView findByZoeken(
-			@ModelAttribute RegioSoortOuderdom regioSoortOuderdom,
+	@RequestMapping(value = "artikelsZoeken", method = RequestMethod.GET)
+	ModelAndView findByZoeken(@Valid RegioSoortOuderdom regioSoortOuderdom,
 			BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView(ZOEKEN_VIEW);
 		modelAndView.addObject("soorten", Arrays.asList(Soort.values()))
 				.addObject("ouderdom", Arrays.asList(Ouderdom.values()));
-		if (regioSoortOuderdom.getRegio().isEmpty()) {
-			List<Artikel> artikels = artikelService
-					.findBySoortLike(regioSoortOuderdom);
-			if (artikels.isEmpty()) {
-				bindingResult.reject("geenArtikels");
-			} else {
-				modelAndView.addObject("artikels", artikels);
-			}
+		List<Artikel> artikels = artikelService.zoeken(regioSoortOuderdom);
+		if (artikels.isEmpty()) {
+			bindingResult.reject("geenArtikels");
 		} else {
-			List<Artikel> artikels = artikelService
-					.findByRegioLikeAndSoortLike(regioSoortOuderdom);
-			if (artikels.isEmpty()) {
-				bindingResult.reject("geenArtikels");
-			} else {
-				modelAndView.addObject("artikels", artikels);
-			}
+			modelAndView.addObject("artikels", artikels);
 		}
-
 		return modelAndView;
 	}
 
@@ -208,7 +199,14 @@ public class ArtikelController {
 		if (!artikel.getUser().getNaam().equals(currentUser)) {
 			return new ModelAndView(FORBIDDEN);
 		}
-		return new ModelAndView(WIJZIGEN_VIEW).addObject(artikel);
+		List<Soort> soorten = new ArrayList<Soort>(
+				Arrays.asList(Soort.values()));
+		soorten.remove(0);
+		List<Ouderdom> ouderdom = new ArrayList<Ouderdom>(
+				Arrays.asList(Ouderdom.values()));
+		ouderdom.remove(0);
+		return new ModelAndView(WIJZIGEN_VIEW).addObject(artikel)
+				.addObject("soorten", soorten).addObject("ouderdom", ouderdom);
 	}
 
 	@RequestMapping(value = "{id}/wijzigen", method = RequestMethod.POST)

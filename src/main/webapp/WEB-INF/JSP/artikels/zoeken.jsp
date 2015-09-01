@@ -18,16 +18,22 @@
 	<v:menu />
 	<div class="login">
 		<div class="login-top">
-			<h2>Artikels per soort en/of regio</h2>
+			<h2>Artikels zoeken</h2>
 	</div>
 		<div class="login-bottom"><c:url
 				value='/artikels/artikelsZoeken' var='url' /> <form:form
 				action="${url}" commandName='regioSoortOuderdom' method='get'>
 				<div class="user"><form:input path='regio' name='regio'
-						type='text' placeholder="Regio (kan leeg zijn om alleen op soort te zoeken)" maxlength='50'
+						type='text' placeholder="Regio" maxlength='50'
 						autofocus='autofocus' /></div>
+				<div class="fout"><form:errors path='regio' cssClass="fout"
+						delimiter=', ' /></div>
 				<label> <form:select path="soort" name='soort'>
 						<form:options items="${soorten}" itemLabel="id" />
+					</form:select>
+				</label>
+				<label> <form:select path="ouderdom" name='ouderdom'>
+						<form:options items="${ouderdom}" itemLabel="id" />
 					</form:select>
 				</label>
 				<form:errors cssClass='fout' />

@@ -18,11 +18,7 @@ public interface ArtikelService {
 
 	List<Artikel> findAll();
 	
-	List<Artikel> findByRegioLike(RegioSoortOuderdom regioSoortOuderdom);
-	
-	List<Artikel> findBySoortLike(RegioSoortOuderdom regioSoortOuderdom);
-	
-	List<Artikel> findByRegioLikeAndSoortLike(RegioSoortOuderdom regioSoortOuderdom);
+	List<Artikel> zoeken(RegioSoortOuderdom regioSoortOuderdom);
 	
 	List<Artikel> findByUser(User user);
 	
