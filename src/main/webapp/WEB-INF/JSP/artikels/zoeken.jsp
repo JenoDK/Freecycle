@@ -15,6 +15,7 @@
 	rel="stylesheet">
 </head>
 <body>
+	<spring:htmlEscape defaultHtmlEscape="true" />
 	<v:menu />
 	<div class="login">
 		<div class="login-top">

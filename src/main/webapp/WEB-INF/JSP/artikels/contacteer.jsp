@@ -9,11 +9,13 @@
 <html lang='nl'>
 <head>
 <v:head title='${contactBericht.artikel.user.naam} contacteren' />
-<link rel='stylesheet' href='<c:url value="/styles/contacteerStyle.css"/>'>
+<link rel='stylesheet'
+	href='<c:url value="/styles/contacteerStyle.css"/>'>
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
 	rel='stylesheet' type='text/css'>
 </head>
 <body>
+	<spring:htmlEscape defaultHtmlEscape="true" />
 	<v:menu />
 	<div class="login">
 
@@ -34,10 +36,11 @@
 						placeholder="Bericht(max 255 tekens)" required='required'
 						maxlength="255" /></div>
 				<p id="count"></p>
-				<form:input path='artikel.id' type="hidden" value="${contactBericht.artikel.id}" />
+				<form:input path='artikel.id' type="hidden"
+					value="${contactBericht.artikel.id}" />
 				<%
 					ReCaptcha c = ReCaptchaFactory.newReCaptcha("6Lf7XgsTAAAAANVtZnaqMJCtpqTTBjeatUaxEQqJ","6Lf7XgsTAAAAADJQ940XN0Hwc6Qglw2pt2FUKhE1", false);
-									out.print(c.createRecaptchaHtml(null, null));
+											out.print(c.createRecaptchaHtml(null, null));
 				%>
 				<div class="fout"><form:errors cssClass="fout" path=''
 						delimiter=', ' /></div>

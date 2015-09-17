@@ -11,6 +11,7 @@
 	rel='stylesheet' type='text/css'>
 </head>
 <body>
+<spring:htmlEscape defaultHtmlEscape="true" />
 	<v:menu />
 	<div class="login">
 

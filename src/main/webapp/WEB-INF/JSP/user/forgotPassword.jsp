@@ -11,6 +11,7 @@
 	rel='stylesheet' type='text/css'>
 </head>
 <body>
+	<spring:htmlEscape defaultHtmlEscape="true" />
 	<v:menu />
 	<div class="login">
 
@@ -35,7 +36,7 @@
 
 			</form:form>
 			<div class="clear"></div></div>
-	</div>
+</div>
 	<script>
 		document.getElementById('toevoegform').onsubmit = function() {
 			document.getElementById('toevoegknop').disabled = true;
