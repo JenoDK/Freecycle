@@ -20,7 +20,7 @@ public class RolServiceImpl implements RolService {
 	@Override
 	@ModifyingTransactionalServiceMethod
 	public void create(Rol rol) {
-		rol.setId(rolDAO.save(rol).getId());
+		rolDAO.save(rol);
 	}
 
 	@Override
