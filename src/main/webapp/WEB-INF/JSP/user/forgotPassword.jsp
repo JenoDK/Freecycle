@@ -6,11 +6,12 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<v:head title='Paswoord vergeten' />
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
 	rel='stylesheet' type='text/css'>
 </head>
 <body>
+	<spring:htmlEscape defaultHtmlEscape="true" />
 	<v:menu />
 	<div class="login">
 
@@ -35,7 +36,7 @@
 
 			</form:form>
 			<div class="clear"></div></div>
-	</div>
+</div>
 	<script>
 		document.getElementById('toevoegform').onsubmit = function() {
 			document.getElementById('toevoegknop').disabled = true;

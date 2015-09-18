@@ -3,6 +3,7 @@ body {
 	font-family: 'Droid Sans', sans-serif;
 	font-size: 100%;
 	background-color: #e3ecf0;
+	min-width: 1366px;
 }
 
 #aanmeldenlogo {
@@ -237,6 +238,7 @@ div{
 	border: medium none;
 	background: #366b82 none repeat scroll 0% 0%;
 	float: right;
+	word-wrap: normal;
 }
 
 .keep-loginbutton2 input[type="submit"] {

@@ -6,13 +6,14 @@
 <!doctype html>
 <html lang='nl'>
 <head>
-<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<v:head title='Artikel toevoegen' />
 <link rel='stylesheet'
 	href='<c:url value="/styles/artikelToevoegenStyle.css"/>'>
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
 	rel='stylesheet' type='text/css'>
 </head>
 <body>
+	<spring:htmlEscape defaultHtmlEscape="true" />
 	<v:menu />
 	<div class="login">
 
@@ -50,6 +51,8 @@
 						rows="5" cols="30" path='beschrijving' name="beschrijving"
 						placeholder="Beschrijving(max 255 tekens)" maxlength="255" /></div>
 				<p id="count"></p>
+				<div class="fout"><form:errors path='beschrijving'
+						cssClass="fout" delimiter=', ' /></div>
 
 
 				<label> <form:select path="soort">

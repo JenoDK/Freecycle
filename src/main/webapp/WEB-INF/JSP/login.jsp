@@ -7,11 +7,12 @@
 <!DOCTYPE html>
 <html lang='nl'>
 <head>
-<link rel='stylesheet' href='<c:url value="/styles/loginStyle.css"/>'>
+<v:head title='Inloggen' />
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700'
 	rel='stylesheet' type='text/css'>
 </head>
 <body>
+	<spring:htmlEscape defaultHtmlEscape="true" />
 	<v:menu />
 	<div class="login">
 
@@ -22,11 +23,9 @@
 		<div class="login-bottom">
 			<form method='post'>
 				<div class="user"><input name='username' required type="text"
-					placeholder="Gebruikersnaam" ><i></i>
-			</div>
+					placeholder="Gebruikersnaam"><i></i></div>
 				<div class="user-in"><input name='password' type='password'
-					required type="password" placeholder="Paswoord"
-					><i></i>
+					required type="password" placeholder="Paswoord"><i></i>
 			</div> <c:if test='${param.error != null}'>
 					<span class='fout'>Verkeerde gebruikersnaam of paswoord.</span>
 				</c:if>

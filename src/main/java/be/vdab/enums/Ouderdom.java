@@ -1,7 +1,7 @@
 package be.vdab.enums;
 
 public enum Ouderdom {
-	OUD("Oud"), MIDDELMATIG("Middelmatig"), NIEUW("Nieuw");
+	OUDERDOM("Ouderdom"), OUD("Oud"), MIDDELMATIG("Middelmatig"), NIEUW("Nieuw");
 
 	private String id;
 

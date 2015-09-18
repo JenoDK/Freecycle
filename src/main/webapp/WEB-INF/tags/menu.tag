@@ -11,7 +11,6 @@
 			<ul>
 				<li><a href="<c:url value='/artikels'/>">Lijst</a></li>
 				<li><a href="<c:url value='/artikels/toevoegen'/>">Toevoegen</a></li>
-				<li><a href="<c:url value='/artikels/regio'/>">Per regio</a></li>
 				<li><a href="<c:url value='/artikels/zoeken'/>">Zoeken</a></li>
 			</ul></li>
 		<security:authorize access='isAnonymous()'>

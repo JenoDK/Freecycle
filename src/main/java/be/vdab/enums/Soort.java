@@ -1,7 +1,7 @@
 package be.vdab.enums;
 
 public enum Soort {
-	ELEKTRO("Elektro"), MEUBEL("Meubel"), GEREEDSCHAP("Gereedschap"), OVERIGE("Overige"), FOOD("Food"), KEUKEN("Keuken"), AUTO("Auto");
+	SOORTEN("Soort"), ELEKTRO("Elektro"), MEUBEL("Meubel"), GEREEDSCHAP("Gereedschap"), OVERIGE("Overige"), FOOD("Food"), KEUKEN("Keuken"), AUTO("Auto");
 	
 	private String id;
 
