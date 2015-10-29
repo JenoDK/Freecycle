@@ -1,13 +1,12 @@
 package be.vdab.web;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
-import net.tanesha.recaptcha.ReCaptchaImpl;
-import net.tanesha.recaptcha.ReCaptchaResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import be.vdab.entities.Rol;
 import be.vdab.entities.User;
 import be.vdab.exceptions.EmailExistsException;
 import be.vdab.exceptions.NameExistsException;
@@ -30,6 +30,8 @@ import be.vdab.services.ArtikelService;
 import be.vdab.services.RolService;
 import be.vdab.services.UserService;
 import be.vdab.valueobjects.UsernameAndEmail;
+import net.tanesha.recaptcha.ReCaptchaImpl;
+import net.tanesha.recaptcha.ReCaptchaResponse;
 
 @Controller
 @RequestMapping(value = "/user", produces = MediaType.TEXT_HTML_VALUE)
@@ -48,18 +50,18 @@ public class UserController {
 	private static final String FORGOT_PASSWORD = "user/forgotPassword";
 	private static final String FORGOT_PASSWORD_SUCCES = "user/forgotPasswordSucces";
 	private static final String FORBIDDEN = "forbidden";
+	private static final String ADMIN_VIEW = "user/adminPanel";
+	private static final String REDIRECT_URL_NA_BAN = "user/banSucces";
 
 	@Autowired
-	UserController(UserService userService, RolService rolService,
-			ArtikelService artikelService) {
+	UserController(UserService userService, RolService rolService, ArtikelService artikelService) {
 		this.userService = userService;
 		this.rolService = rolService;
 		this.artikelService = artikelService;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String create(@Valid User user, BindingResult bindingResult,
-			HttpServletRequest request) {
+	public String create(@Valid User user, BindingResult bindingResult, HttpServletRequest request) {
 		if (bindingResult.hasErrors()) {
 			return TOEVOEGEN_VIEW;
 		}
@@ -69,8 +71,7 @@ public class UserController {
 
 		String challenge = request.getParameter("recaptcha_challenge_field");
 		String uresponse = request.getParameter("recaptcha_response_field");
-		ReCaptchaResponse reCaptchaResponse = reCaptcha.checkAnswer(remoteAddr,
-				challenge, uresponse);
+		ReCaptchaResponse reCaptchaResponse = reCaptcha.checkAnswer(remoteAddr, challenge, uresponse);
 
 		if (!reCaptchaResponse.isValid()) {
 			bindingResult.reject("recaptchaFout");
@@ -105,17 +106,40 @@ public class UserController {
 	ModelAndView findArtikels(Principal principal) {
 		String currentUser = principal.getName();
 		User user = userService.findByNaamLike(currentUser);
-		return new ModelAndView(ARTIKELS_VIEW, "artikels",
-				artikelService.findByUser(user));
+		return new ModelAndView(ARTIKELS_VIEW, "artikels", artikelService.findByUser(user));
 	}
-	
+
+	@RequestMapping(value = "adminPanel", method = RequestMethod.GET)
+	ModelAndView showAdminPanel(Principal principal) {
+		String currentUser = principal.getName();
+		User user = userService.findByNaamLike(currentUser);
+		for (Rol rol : user.getRollen()) {
+			if (rol.getNaam().equals("admin")) {
+				return new ModelAndView(ADMIN_VIEW);
+			}
+		}
+		return new ModelAndView(FORBIDDEN);
+	}
+
+	@RequestMapping(value = "adminPanelUsers", method = RequestMethod.GET)
+	ModelAndView showAdminPanelUsers(Principal principal) {
+		List<User> users = new ArrayList<User>();
+		users = userService.findAll();
+		return new ModelAndView(ADMIN_VIEW, "users", users);
+	}
+
+	@RequestMapping(value = "{user}/banHammer", method = RequestMethod.POST)
+	String banUser(@PathVariable User user, Principal principal) {
+		return REDIRECT_URL_NA_BAN;
+	}
+
 	@RequestMapping(value = "{user}", method = RequestMethod.GET)
 	ModelAndView findArtikelsFromUser(@PathVariable User user) {
 		if (user == null) {
 			return new ModelAndView(REDIRECT_URL_USER_NIET_GEVONDEN);
 		}
-		return new ModelAndView(USER_ARTIKELS_VIEW, "artikels",
-				artikelService.findByUser(user)).addObject("user", user.getNaam());
+		return new ModelAndView(USER_ARTIKELS_VIEW, "artikels", artikelService.findByUser(user)).addObject("user",
+				user.getNaam());
 	}
 
 	@RequestMapping(value = "{user}/wijzigen", method = RequestMethod.GET)
@@ -132,7 +156,8 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "{id}/wijzigen", method = RequestMethod.POST)
-	String update(@Valid User user, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
+	String update(@Valid User user, BindingResult bindingResult, HttpServletRequest request,
+			HttpServletResponse response) {
 		if (bindingResult.hasErrors()) {
 			return WIJZIGEN_VIEW;
 		}
@@ -153,9 +178,9 @@ public class UserController {
 			return WIJZIGEN_VIEW;
 		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null){    
-           new SecurityContextLogoutHandler().logout(request, response, auth);
-        }
+		if (auth != null) {
+			new SecurityContextLogoutHandler().logout(request, response, auth);
+		}
 		return REDIRECT_URL_NA_WIJZIGEN;
 	}
 
@@ -168,18 +193,17 @@ public class UserController {
 
 	@RequestMapping(value = "forgotPassword", method = RequestMethod.GET)
 	ModelAndView createResetPasswordForm() {
-		return new ModelAndView(FORGOT_PASSWORD, "usernameAndEmail",
-				new UsernameAndEmail());
+		return new ModelAndView(FORGOT_PASSWORD, "usernameAndEmail", new UsernameAndEmail());
 	}
-	
+
 	@InitBinder("usernameAndEmail")
 	void initBinderUsernameAndEmail(WebDataBinder binder) {
 		binder.initDirectFieldAccess();
 	}
 
 	@RequestMapping(value = "forgotPassword/reset", method = RequestMethod.POST)
-	public String ForgotPassword(@Valid UsernameAndEmail usernameAndEmail,
-			BindingResult bindingResult) throws Exception {
+	public String ForgotPassword(@Valid UsernameAndEmail usernameAndEmail, BindingResult bindingResult)
+			throws Exception {
 		if (bindingResult.hasErrors()) {
 			return FORGOT_PASSWORD;
 		}
@@ -192,14 +216,14 @@ public class UserController {
 			bindingResult.reject("emailBestaatNiet");
 			return FORGOT_PASSWORD;
 		}
-//		try {
-			userService.safeUpdate(user);
-//		} catch (Exception ex) {
-//			if (ex instanceof MessagingException) {
-//				bindingResult.reject("mailServerError");
-//				return FORGOT_PASSWORD;
-//			}
-//		}
+		// try {
+		userService.safeUpdate(user);
+		// } catch (Exception ex) {
+		// if (ex instanceof MessagingException) {
+		// bindingResult.reject("mailServerError");
+		// return FORGOT_PASSWORD;
+		// }
+		// }
 		return FORGOT_PASSWORD_SUCCES;
 	}
 }

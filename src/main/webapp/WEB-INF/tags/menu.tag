@@ -14,15 +14,18 @@
 				<li><a href="<c:url value='/artikels/zoeken'/>">Zoeken</a></li>
 			</ul></li>
 		<security:authorize access='isAnonymous()'>
-			<li class="rightMenu"><a href="<c:url value='/login'/>">Inloggen<img id="aanmeldenlogo" src="<c:url value="/images/user2.png" />"/></a></li>
+			<li class="rightMenu"><a href="<c:url value='/login'/>">Inloggen<img
+					id="aanmeldenlogo" src="<c:url value="/images/user2.png" />" /></a></li>
 		</security:authorize>
 		<security:authorize access='isAuthenticated ()'>
-			<li class="rightMenu"><a href="#"><security:authentication property="name" /><img id="aanmeldenlogo" src="<c:url value="/images/user2.png" />"/></a>
+			<li class="rightMenu"><a href="#"><security:authentication
+						property="name" /><img id="aanmeldenlogo"
+					src="<c:url value="/images/user2.png" />" /></a>
 				<ul>
 					<li><spring:url value='/user/gegevens' var='wijzigURL' />
 						<form action='${wijzigURL}'>
-							<input type='submit' class="submitLink" value='Mijn Accountgegevens'
-								id='logoutbutton'>
+							<input type='submit' class="submitLink"
+								value='Mijn Accountgegevens' id='logoutbutton'>
 							<security:csrfInput />
 						</form>
 					<li><a href="<c:url value='/user/mijnArtikels'/>">Mijn
@@ -30,12 +33,15 @@
 					<li>
 						<form method='post' action='<c:url value="/logout"/>'
 							id='logoutform'>
-							<input type='submit' class="submitLink" 
+							<input type='submit' class="submitLink"
 								value='<security:authentication property="name"/> afmelden'
 								id='logoutbutton'>
 							<security:csrfInput />
 						</form>
 					</li>
+					<security:authorize access='hasRole([admin])'>
+						<li><a href="<c:url value='/user/adminPanel'/>">Adminpanel</a></li>
+					</security:authorize>
 				</ul></li>
 		</security:authorize>
 		<security:authorize access='isAnonymous()'>
